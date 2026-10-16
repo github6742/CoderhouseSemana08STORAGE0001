@@ -245,6 +245,7 @@ function crearFormularioCrearArticulo(e){
 
 function crearFormularioListarArticulos(e){
     e.preventDefault();
+    const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -305,7 +306,8 @@ function crearFormularioListarArticulos(e){
     tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";
     tagTablaListadoTbody.className = "tablaListarArticulosTablaRegistro";
     //
-    listaPrecioArticulos.forEach(articulo => {
+    //listaPrecioArticulos.forEach(articulo => {
+    lista.forEach(articulo => {
         const registro = document.createElement("tr");        
         registro.innerHTML = `
             <td>${articulo.id}</td>

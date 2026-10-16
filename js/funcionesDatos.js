@@ -1,5 +1,9 @@
 function cargarArticulo(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  console.log("0010----------------------");
+  console.log(listaPrecioArticulos.length);
+  console.log(listaPrecioArticulos);
   const id = listaPrecioArticulos.length + 1;
   const codigo = document.getElementById("idCrearArticuloCodigo").value;--idCrearArticuloCodigo
   const nombre = document.getElementById("idCrearArticuloNombre").value;
@@ -12,12 +16,14 @@ function cargarArticulo(e){
                                      marca.toUpperCase(), 
                                      categoria.toUpperCase(), 
                                      parseFloat(precio));
-  listaPrecioArticulos.push(articuloNuevo);
+  lista.push(articuloNuevo);
+  localStorage.setItem("listaPrecioArticulos", JSON.stringify(lista));
   crearMensajeDialog("exito", "El articulo se creo satisfactoriamente");
 };
 
 function crearListadoConDescuento(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const listado = document.getElementById("idListarArticulosTablaRegistro");
   const listadoTabla = document.getElementById("idListarArticulosTabla");
   const listadoTablaThead = document.getElementById("idListarArticulosTablaTitulos");
@@ -31,7 +37,8 @@ function crearListadoConDescuento(e){
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
         
-     const articulosDescuento = listaPrecioArticulos.map(articulo => {
+     const articulosDescuento = lista.map(articulo => {
+     //const articulosDescuento = listaPrecioArticulos.map(articulo => {
         let precioDescuento = articulo.precio - (articulo.precio * (valorDescuento/100));
         return {
             id: articulo.id,
@@ -64,7 +71,8 @@ function crearListadoConDescuento(e){
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
     //
-    listaPrecioArticulos.forEach(articulo => {
+    //listaPrecioArticulos.forEach(articulo => {
+    lista.forEach(articulo => {
         const registro = document.createElement("tr");        
         registro.innerHTML = `
             <td>${articulo.id}</td>
@@ -85,9 +93,12 @@ function eliminarArticuloLista(e){
   e.preventDefault();
   const idArticulo = e.target.dataset.id;
   const idDivregistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
-  const indice = listaPrecioArticulos.findIndex((articulo) => articulo.id == idArticulo);
+  const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  //const indice = listaPrecioArticulos.findIndex((articulo) => articulo.id == idArticulo);
+  const indice = lista.findIndex((articulo) => articulo.id == idArticulo);
   if (indice !== -1) {
-     listaPrecioArticulos.splice(indice, 1);
+     //listaPrecioArticulos.splice(indice, 1);
+     lista.splice(indice, 1);
   };
   const contenedor = document.getElementById(idDivregistrosEncontrados);
   for (const registro of contenedor.children) {
@@ -97,11 +108,14 @@ function eliminarArticuloLista(e){
        break; 
      };
   };
-        crearMensajeDialog("exito", "Se elimino el articulo de la lista de precios");
+  
+  localStorage.setItem("listaPrecioArticulos", JSON.stringify(lista));
+  crearMensajeDialog("exito", "Se elimino el articulo de la lista de precios");
 };
 
 function crearListadoArticulosEncontrados(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const tagMain = document.getElementById("idMain");
   const tagDivContenedorResultadoBuscar = document.getElementById("idContenedorBuscarArticulosResultados");
   tagDivContenedorResultadoBuscar.innerHTML = "";
@@ -114,7 +128,8 @@ function crearListadoArticulosEncontrados(e){
   //
   let articulosEncontrados = [];
 
-  if (listaPrecioArticulos.some(articulo => articulo.id == idBuscar) && (!esString(idBuscar))){
+  //if (listaPrecioArticulos.some(articulo => articulo.id == idBuscar) && (!esString(idBuscar))){
+  if (lista.some(articulo => articulo.id == idBuscar) && (!esString(idBuscar))){
      let articuloEncontrado = listaPrecioArticulos.find(articulo => articulo.id == idBuscar);
      articulosEncontrados = [
         {          
@@ -157,7 +172,8 @@ function crearListadoArticulosEncontrados(e){
   };
   //
   if (esString(idBuscar) && categoriaBuscar.length == 0 && marcaBuscar == 0){
-      listaPrecioArticulos.forEach(articulo => {
+      //listaPrecioArticulos.forEach(articulo => {
+      lista.forEach(articulo => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado";    
@@ -235,6 +251,7 @@ function crearListadoArticulosEncontrados(e){
 
 function crearListadoExistenciaArticulo(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const tagMain = document.getElementById("idMain");
   const tagDivContenedorResultadoVerificar= document.getElementById("idContenedorResultadosVerificar");
   tagDivContenedorResultadoVerificar.innerHTML = "";
@@ -245,8 +262,10 @@ function crearListadoExistenciaArticulo(e){
   //
   let articulosEncontrados = [];
   //
-  if (listaPrecioArticulos.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )) {
-     let articuloEncontrado = listaPrecioArticulos.find(articulo => articulo.codigo == codigo.toUpperCase());
+  //if (listaPrecioArticulos.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )) {
+  if (lista.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )) {
+     //let articuloEncontrado = listaPrecioArticulos.find(articulo => articulo.codigo == codigo.toUpperCase());
+     let articuloEncontrado = lista.find(articulo => articulo.codigo == codigo.toUpperCase());
      articulosEncontrados = [
         {          
           id: articuloEncontrado.id,
@@ -261,7 +280,8 @@ function crearListadoExistenciaArticulo(e){
    //
    if (codigo.length == 0){
       //
-      listaPrecioArticulos.forEach(articulo => {
+      //listaPrecioArticulos.forEach(articulo => {
+      lista.forEach(articulo => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado";    
@@ -306,11 +326,14 @@ function crearListadoExistenciaArticulo(e){
 
 function eliminarArticuloCarrito(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   const idArticulo = e.target.dataset.id;
   const idDivRegistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
-  const indice = carritoCompras.findIndex((articulo) => articulo.id == idArticulo);
+  //const indice = carritoCompras.findIndex((articulo) => articulo.id == idArticulo);
+  const indice = lista.findIndex((articulo) => articulo.id == idArticulo);
   if (indice !== -1) {
-     carritoCompras.splice(indice, 1);
+     //carritoCompras.splice(indice, 1);
+     lista.splice(indice, 1);
   };
   const contenedor = document.getElementById(idDivRegistrosEncontrados);
   for (const registro of contenedor.children) {
@@ -319,12 +342,14 @@ function eliminarArticuloCarrito(e){
        registro.remove(); 
        break; 
      };
-  };
-        crearMensajeDialog("exito", "Se elimino el articulo del carrito");
+  };  
+  localStorage.setItem("carritoCompras", JSON.stringify(lista));
+  crearMensajeDialog("exito", "Se elimino el articulo del carrito");
 };
 
 function verCarrito(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   const tagMain = document.getElementById("idMain");
   //
   const tagDivContenedorVerCarrito = document.createElement("div");
@@ -346,7 +371,8 @@ function verCarrito(e){
   tagContenedorRegistroEncontradoCarrito.className = "contenedorRegistroEncontradoCarrito";
   //
   let totalCarrito = 0;
-  carritoCompras.forEach( articulo =>{ 
+  //carritoCompras.forEach( articulo =>{ 
+  lista.forEach( articulo =>{ 
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontradoCarrito";
         registro.className = "registroEncontradoCarrito";    
@@ -415,26 +441,33 @@ function ocultarCarrito(e){
 
 function vaciarCarrito(e){
   e.preventDefault();
+  const lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   //
   if (document.getElementById("idContenedorVerCarrito")){
      document.getElementById("idMain").removeChild(document.getElementById("idContenedorVerCarrito"));
   };
   //
-  if (carritoCompras.length > 0) {
-     carritoCompras.splice(0,carritoCompras.length);
+  //if (carritoCompras.length > 0) {
+  if (lista.length > 0) {
+     //carritoCompras.splice(0,carritoCompras.length);
+     lista.splice(0,lista.length);
   };
+  localStorage.setItem("carritoCompras", JSON.stringify(lista));
   crearMensajeDialog("exito", "El carrito de compras esta vacio ahora");
 };
 
 function agregarAlCarrito(articulo, cantidad){
   articulo.cantidad = cantidad;
+  lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   //
-  if (carritoCompras.some(articuloCC => articuloCC.id == articulo.id)){
+  //if (carritoCompras.some(articuloCC => articuloCC.id == articulo.id)){
+  if (lista.some(articuloCC => articuloCC.id == articulo.id)){
     //
     
   crearMensajeDialog("error", "Ya existe en el carrito");
   } else {
-    carritoCompras.push(articulo);
+    //.push(articulo);
+    lista.push(articulo);
     const registro = document.createElement("div");    
     registro.id = "idRegistroEncontradoCarrito";
     registro.className = "registroEncontradoCarrito";    
@@ -474,16 +507,19 @@ function agregarAlCarrito(articulo, cantidad){
     ////////////////////////////////
     if (document.getElementById("idContenedorRegistroEncontradoCarrito")) {
        document.getElementById("idContenedorRegistroEncontradoCarrito").appendChild(registro);
-       const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
+       //const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
+       const totalCarrito = lista.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
        //
        if(document.getElementById("idVerCarritoTotalP")){
          document.getElementById("idVerCarritoTotalP").innerText = "Total del carrito: " + totalCarrito;
        };
     };
+  localStorage.setItem("carritoCompras", JSON.stringify(lista));  
   crearMensajeDialog("exito", "Se agrego articulo al carrito");
   };
   //
-  if (carritoCompras.length > 0){
+  //if (carritoCompras.length > 0){
+  if (lista.length > 0){
     //
     const tagMain = document.getElementById("idMain");
     const tagDivContenedorMostrarCarritoBotones = document.createElement("div");
@@ -530,6 +566,10 @@ function agregarAlCarrito(articulo, cantidad){
 
 function crearFormularioComprar(e){
   e.preventDefault();
+  const listaPrecios = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  console.log("lista precios")
+  console.log(listaPrecios)
+  //const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   const tagMain = document.getElementById("idMain");
   const tagDivArticulosEncontrados = document.createElement("div");
   tagDivArticulosEncontrados.id = "idRegistrosEncontrados";
@@ -541,14 +581,16 @@ function crearFormularioComprar(e){
   let articulosEncontrados = [];
   //
   if (categoriaBuscar.length > 0){
-     articulosEncontrados = listaPrecioArticulos.filter(
+     //articulosEncontrados = listaPrecioArticulos.filter(
+     articulosEncontrados = listaPrecios.filter(
          articulo => articulo.categoria.toUpperCase() == categoriaBuscar.toUpperCase()
      );
   };
 
   if (articulosEncontrados.length == 0) {
     if (marcaBuscar.length > 0){
-       articulosEncontrados = listaPrecioArticulos.filter(
+       //articulosEncontrados = listaPrecioArticulos.filter(
+       articulosEncontrados = listaPrecios.filter(
          articulo => articulo.marca.toUpperCase().includes(marcaBuscar.toUpperCase())
        );
     };
@@ -561,7 +603,8 @@ function crearFormularioComprar(e){
   };
   //
   if (categoriaBuscar.length == 0 && marcaBuscar == 0){
-     listaPrecioArticulos.forEach(articulo => {
+     //listaPrecioArticulos.forEach(articulo => {
+     listaPrecios.forEach(articulo => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado"; 

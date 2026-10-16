@@ -165,7 +165,11 @@ const listaPrecioArticulos = [
       }
 ];
 
-const carritoCompras = [];
+//localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
+//const carritoCompras = [];
+const carritoCompras = JSON.parse(localStorage.getItem("carritoCompras")) || [];
+const articulosBuscados = JSON.parse(localStorage.getItem("articulosBuscados")) || [];
+const articulosBuscadosCompras = JSON.parse(localStorage.getItem("articulosBuscadosCompras")) || [];
 class Articulo {
       constructor(id,
                   codigo, 
