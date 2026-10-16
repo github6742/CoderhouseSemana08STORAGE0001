@@ -83,20 +83,21 @@ function crearListadoConDescuento(e){
 
 function eliminarArticuloLista(e){
   e.preventDefault();
-   const idArticulo = e.target.dataset.id;
-   const idDivregistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
-   const indice = listaPrecioArticulos.findIndex((articulo) => articulo.id == idArticulo);
-   if (indice !== -1) {
-      listaPrecioArticulos.splice(indice, 1);
-   };
-   const contenedor = document.getElementById(idDivregistrosEncontrados);//("idRegistrosEncontrados");
-   for (const registro of contenedor.children) {
-      const boton = registro.querySelector(".buttonGlobal");
-      if (boton && boton.dataset.id === idArticulo) {
-        registro.remove(); 
-        break; 
-      };
-   };
+  const idArticulo = e.target.dataset.id;
+  const idDivregistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
+  const indice = listaPrecioArticulos.findIndex((articulo) => articulo.id == idArticulo);
+  if (indice !== -1) {
+     listaPrecioArticulos.splice(indice, 1);
+  };
+  const contenedor = document.getElementById(idDivregistrosEncontrados);
+  for (const registro of contenedor.children) {
+     const boton = registro.querySelector(".buttonGlobal");
+     if (boton && boton.dataset.id === idArticulo) {
+       registro.remove(); 
+       break; 
+     };
+  };
+        crearMensajeDialog("exito", "Se elimino el articulo de la lista de precios");
 };
 
 function crearListadoArticulosEncontrados(e){
@@ -303,6 +304,25 @@ function crearListadoExistenciaArticulo(e){
   };
 };
 
+function eliminarArticuloCarrito(e){
+  e.preventDefault();
+  const idArticulo = e.target.dataset.id;
+  const idDivRegistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
+  const indice = carritoCompras.findIndex((articulo) => articulo.id == idArticulo);
+  if (indice !== -1) {
+     carritoCompras.splice(indice, 1);
+  };
+  const contenedor = document.getElementById(idDivRegistrosEncontrados);
+  for (const registro of contenedor.children) {
+     const boton = registro.querySelector(".buttonGlobal");
+     if (boton && boton.dataset.id === idArticulo) {
+       registro.remove(); 
+       break; 
+     };
+  };
+        crearMensajeDialog("exito", "Se elimino el articulo del carrito");
+};
+
 function verCarrito(e){
   e.preventDefault();
   const tagMain = document.getElementById("idMain");
@@ -341,6 +361,30 @@ function verCarrito(e){
         `;        
         totalCarrito += articulo.precio*articulo.cantidad;
         tagContenedorRegistroEncontradoCarrito.appendChild(registro);
+//////////////////////////////////
+  
+        //tagDivArticulosEncontrados.appendChild(registro);
+
+        const tagDivContenedorBotonEliminarArticuloCarrito = document.createElement("div");
+        tagDivContenedorBotonEliminarArticuloCarrito.id = "idContenedorBotonEliminarArticuloCarrito";
+        tagDivContenedorBotonEliminarArticuloCarrito.className = "contenedorBotonEliminarArticuloCarrito";
+
+        const tagDivBotonEliminarArticuloCarrito = document.createElement("button");
+        tagDivBotonEliminarArticuloCarrito.id = "idBotonEliminarArticuloLista";
+        tagDivBotonEliminarArticuloCarrito.className = "buttonGlobal";
+        tagDivBotonEliminarArticuloCarrito.innerText = "Eliminar";
+        tagDivBotonEliminarArticuloCarrito.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloCarrito.dataset.idRegistrosEncontrados = "idContenedorRegistroEncontradoCarrito";
+        tagDivBotonEliminarArticuloCarrito.addEventListener("click",eliminarArticuloCarrito);
+
+
+        tagDivContenedorBotonEliminarArticuloCarrito.appendChild(tagDivBotonEliminarArticuloCarrito);
+        registro.appendChild(tagDivContenedorBotonEliminarArticuloCarrito);
+        tagContenedorRegistroEncontradoCarrito.appendChild(registro);
+//////////////////////////////////////
+
+
+
     }
   );
   //
@@ -387,17 +431,8 @@ function agregarAlCarrito(articulo, cantidad){
   //
   if (carritoCompras.some(articuloCC => articuloCC.id == articulo.id)){
     //
-     if (document.getElementById("idErrorAgregarCarrito" + articulo.id)){
-        document.getElementById("idErrorAgregarCarrito" + articulo.id).innerText = "Ya existe en el carrito";
-     } else {
-        const tagErrorAgregarCarrito = document.createElement("p");
-        tagErrorAgregarCarrito.id = "idErrorAgregarCarrito"+ articulo.id;
-        tagErrorAgregarCarrito.className = "errorAgregarCarrito";
-        tagErrorAgregarCarrito.innerText = "Ya existe en el carrito";
-
-        document.getElementById("idRegistroEncontradoComprarBoton").appendChild(tagErrorAgregarCarrito);
-     }
-
+    
+  crearMensajeDialog("error", "Ya existe en el carrito");
   } else {
     carritoCompras.push(articulo);
     const registro = document.createElement("div");    
@@ -412,7 +447,31 @@ function agregarAlCarrito(articulo, cantidad){
             <h6>PRECIO: $${articulo.precio}</h6>
             <h6>TOTAL: $${articulo.precio*articulo.cantidad}</h6>
         `;        
-    //
+    ///////////////////////////
+//////////////////////////////////
+  
+        //tagDivArticulosEncontrados.appendChild(registro);
+
+        const tagDivContenedorBotonEliminarArticuloCarrito = document.createElement("div");
+        tagDivContenedorBotonEliminarArticuloCarrito.id = "idContenedorBotonEliminarArticuloCarrito";
+        tagDivContenedorBotonEliminarArticuloCarrito.className = "contenedorBotonEliminarArticuloCarrito";
+
+        const tagDivBotonEliminarArticuloCarrito = document.createElement("button");
+        tagDivBotonEliminarArticuloCarrito.id = "idBotonEliminarArticuloLista";
+        tagDivBotonEliminarArticuloCarrito.className = "buttonGlobal";
+        tagDivBotonEliminarArticuloCarrito.innerText = "Eliminar";
+        tagDivBotonEliminarArticuloCarrito.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloCarrito.dataset.idRegistrosEncontrados = "idContenedorRegistroEncontradoCarrito";
+        tagDivBotonEliminarArticuloCarrito.addEventListener("click",eliminarArticuloCarrito);
+
+
+        tagDivContenedorBotonEliminarArticuloCarrito.appendChild(tagDivBotonEliminarArticuloCarrito);
+        registro.appendChild(tagDivContenedorBotonEliminarArticuloCarrito);
+        //tagContenedorRegistroEncontradoCarrito.appendChild(registro);
+//////////////////////////////////////
+
+
+    ////////////////////////////////
     if (document.getElementById("idContenedorRegistroEncontradoCarrito")) {
        document.getElementById("idContenedorRegistroEncontradoCarrito").appendChild(registro);
        const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
@@ -421,6 +480,7 @@ function agregarAlCarrito(articulo, cantidad){
          document.getElementById("idVerCarritoTotalP").innerText = "Total del carrito: " + totalCarrito;
        };
     };
+  crearMensajeDialog("exito", "Se agrego articulo al carrito");
   };
   //
   if (carritoCompras.length > 0){
@@ -466,7 +526,6 @@ function agregarAlCarrito(articulo, cantidad){
     };
   };
   
-  crearMensajeDialog("exito", "Se agrego articulo al carrito de compras");
 };
 
 function crearFormularioComprar(e){
