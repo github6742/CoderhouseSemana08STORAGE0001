@@ -81,6 +81,24 @@ function crearListadoConDescuento(e){
   }
 };
 
+function eliminarArticuloLista(e){
+  e.preventDefault();
+   const idArticulo = e.target.dataset.id;
+   const idDivregistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
+   const indice = listaPrecioArticulos.findIndex((articulo) => articulo.id == idArticulo);
+   if (indice !== -1) {
+      listaPrecioArticulos.splice(indice, 1);
+   };
+   const contenedor = document.getElementById(idDivregistrosEncontrados);//("idRegistrosEncontrados");
+   for (const registro of contenedor.children) {
+      const boton = registro.querySelector(".buttonGlobal");
+      if (boton && boton.dataset.id === idArticulo) {
+        registro.remove(); 
+        break; 
+      };
+   };
+};
+
 function crearListadoArticulosEncontrados(e){
   e.preventDefault();
   const tagMain = document.getElementById("idMain");
@@ -150,7 +168,26 @@ function crearListadoArticulosEncontrados(e){
             <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
             <h6>PRECIO: $${articulo.precio}</h6>
         `;        
+        //tagDivArticulosEncontrados.appendChild(registro);
+
+        const tagDivContenedorBotonEliminarArticuloLista = document.createElement("div");
+        tagDivContenedorBotonEliminarArticuloLista.id = "idContenedorBotonEliminarArticuloLista";
+        tagDivContenedorBotonEliminarArticuloLista.className = "contenedorBotonEliminarArticuloLista";
+
+        const tagDivBotonEliminarArticuloLista = document.createElement("button");
+        tagDivBotonEliminarArticuloLista.id = "idBotonEliminarArticuloLista";
+        tagDivBotonEliminarArticuloLista.className = "buttonGlobal";
+        tagDivBotonEliminarArticuloLista.innerText = "Eliminar";
+        tagDivBotonEliminarArticuloLista.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloLista.dataset.idRegistrosEncontrados = "idRegistrosEncontrados";
+        tagDivBotonEliminarArticuloLista.addEventListener("click",eliminarArticuloLista);
+
+
+        tagDivContenedorBotonEliminarArticuloLista.appendChild(tagDivBotonEliminarArticuloLista);
+        registro.appendChild(tagDivContenedorBotonEliminarArticuloLista);
         tagDivArticulosEncontrados.appendChild(registro);
+
+
       });
   } else {
      if (articulosEncontrados.length == 0){
@@ -168,6 +205,24 @@ function crearListadoArticulosEncontrados(e){
             <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
             <h6>PRECIO: $${articulo.precio}</h6>
         `;        
+        //tagDivArticulosEncontrados.appendChild(registro);     
+        
+        tagDivArticulosEncontrados.appendChild(registro);
+
+        const tagDivContenedorBotonEliminarArticuloLista = document.createElement("div");
+        tagDivContenedorBotonEliminarArticuloLista.id = "idContenedorBotonEliminarArticuloLista";
+        tagDivContenedorBotonEliminarArticuloLista.className = "contenedorBotonEliminarArticuloLista";
+
+        const tagDivBotonEliminarArticuloLista = document.createElement("button");
+        tagDivBotonEliminarArticuloLista.id = "idBotonEliminarArticuloLista";
+        tagDivBotonEliminarArticuloLista.className = "buttonGlobal";
+        tagDivBotonEliminarArticuloLista.innerText = "Eliminar";
+        tagDivBotonEliminarArticuloLista.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloLista.dataset.idRegistrosEncontrados = "idRegistrosEncontrados";
+        tagDivBotonEliminarArticuloLista.addEventListener("click",eliminarArticuloLista);
+
+        tagDivContenedorBotonEliminarArticuloLista.appendChild(tagDivBotonEliminarArticuloLista);
+        registro.appendChild(tagDivContenedorBotonEliminarArticuloLista);
         tagDivArticulosEncontrados.appendChild(registro);
        });
      };
