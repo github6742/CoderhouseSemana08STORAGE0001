@@ -8,7 +8,8 @@ function crearMensajeDialog(tipo, texto){
     tagMensajeH3Dialog.id = "idMensajeH3Dialog";
     tagMensajeH3Dialog.className = "mensajeH3Dialog";
     //
-    if (tipo === 'exito') {tagMensajeH3Dialog.innerText="✔ Correcto"} else {tagMensajeH3Dialog.innerText="❌ Error"};
+    // ternario
+     tipo === "exito" ? tagMensajeH3Dialog.innerText="✔ Correcto" : tagMensajeH3Dialog.innerText="❌ Error";
     //
     const tagMensajeParrafoDialog = document.createElement("p");
     tagMensajeParrafoDialog.id = "idMensajeParrafoDialog";
