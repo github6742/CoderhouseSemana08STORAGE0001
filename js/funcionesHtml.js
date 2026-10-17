@@ -531,6 +531,7 @@ function crearFormularioVerificarExistenciaArticulo(e){
 
 function crearFormularioComprarArticulos(e){
     e.preventDefault();
+    const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -629,4 +630,8 @@ function crearFormularioComprarArticulos(e){
     tagDivContenedorFormulario.appendChild(tagDivContenedorFormularioElementos);
     //
     tagMain.appendChild(tagDivContenedorFormulario);
+
+    if (listaCarrito.length > 0){
+        verBotonesCarrito();
+    };
 };

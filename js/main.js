@@ -165,11 +165,13 @@ const listaPrecioArticulos = [
       }
 ];
 
-//localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
+const listaPrecioArticulosStorage = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+
+(listaPrecioArticulosStorage.length == 0) && (listaPrecioArticulosStorage = [...listaPrecioArticulos]);
+
+localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulosStorage));
 //const carritoCompras = [];
 const carritoCompras = JSON.parse(localStorage.getItem("carritoCompras")) || [];
-const articulosBuscados = JSON.parse(localStorage.getItem("articulosBuscados")) || [];
-const articulosBuscadosCompras = JSON.parse(localStorage.getItem("articulosBuscadosCompras")) || [];
 class Articulo {
       constructor(id,
                   codigo, 

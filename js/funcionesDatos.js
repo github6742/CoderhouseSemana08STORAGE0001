@@ -439,9 +439,53 @@ function verCarrito(e){
   };
   */
   //ternario
-  (document.getElementById("idContenedorVerCarrito")) ? tagMain.replaceChild(tagDivContenedorVerCarrito,document.getElementById("idContenedorVerCarrito")) :
-                                                        tagMain.appendChild(tagDivContenedorVerCarrito); 
+  (document.getElementById("idContenedorVerCarrito")) ? tagMain.replaceChild(tagDivContenedorVerCarrito,document.getElementById("idContenedorVerCarrito")) :tagMain.appendChild(tagDivContenedorVerCarrito); 
 };
+
+function verBotonesCarrito(){
+
+ // e.preventDefault();
+  
+    const tagMain = document.getElementById("idMain");
+    const tagDivContenedorMostrarCarritoBotones = document.createElement("div");
+    tagDivContenedorMostrarCarritoBotones.id = "idContenedorMostrarCarritoBotones";
+    tagDivContenedorMostrarCarritoBotones.className = "contenedorMostrarCarritoBotones";
+    const tagDivContenedorMostrarCarritoElementos = document.createElement("div");
+    tagDivContenedorMostrarCarritoElementos.id = "idContenedorMostrarCarritoElementos";
+    tagDivContenedorMostrarCarritoElementos.className = "contenedorMostrarCarritoElementos";
+    const tagDivMostrarCarritoBotones = document.createElement("div");
+    tagDivMostrarCarritoBotones.id = "idMostrarCarritoBotones";
+    tagDivMostrarCarritoBotones.className = "mostrarCarritoBotones";
+    //
+    const tagButtonVerCarrito = document.createElement("button");
+    tagButtonVerCarrito.id = "idVerCarrito";
+    tagButtonVerCarrito.className = "buttonCarrito";
+    tagButtonVerCarrito.innerText = "Ver Carrito";
+    tagButtonVerCarrito.addEventListener("click",verCarrito);
+    //
+    const tagButtonOcultarCarrito = document.createElement("button");
+    tagButtonOcultarCarrito.id = "idOcultarCarrito";
+    tagButtonOcultarCarrito.className = "buttonCarrito";
+    tagButtonOcultarCarrito.innerText = "Ocultar Carrito";
+    tagButtonOcultarCarrito.addEventListener("click",ocultarCarrito);
+    //
+    const tagButtonVaciarCarrito = document.createElement("button");
+    tagButtonVaciarCarrito.id = "idVaciarCarrito";
+    tagButtonVaciarCarrito.className = "buttonCarrito";
+    tagButtonVaciarCarrito.innerText = "Vaciar Carrito";
+    tagButtonVaciarCarrito.addEventListener("click",vaciarCarrito);
+    //
+    tagDivMostrarCarritoBotones.appendChild(tagButtonVerCarrito);
+    tagDivMostrarCarritoBotones.appendChild(tagButtonOcultarCarrito);
+    tagDivMostrarCarritoBotones.appendChild(tagButtonVaciarCarrito);
+    tagDivContenedorMostrarCarritoBotones.appendChild(tagDivMostrarCarritoBotones);
+    //
+ //ternario
+  (document.getElementById("idContenedorMostrarCarritoBotones")) ?
+  tagMain.replaceChild(tagDivContenedorMostrarCarritoBotones,document.getElementById("idContenedorMostrarCarritoBotones")) :
+  tagMain.appendChild(tagDivContenedorMostrarCarritoBotones);
+
+}
 
 function ocultarCarrito(e){
   e.preventDefault();
@@ -476,18 +520,26 @@ function vaciarCarrito(e){
   crearMensajeDialog("exito", "El carrito de compras esta vacio ahora");
 };
 
-function agregarAlCarrito(articulo, cantidad){
-  articulo.cantidad = cantidad;
-  lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
+function agregarAlCarrito(e){
+  e.preventDefault();  
+  listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
+  listaArticulos = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  const idArticulo = e.target.dataset.idArticulo;
+  const cantidadArticulo = e.target.dataset.cantidadArticulo;
+  console.log("idArticulo: " + idArticulo)
+  console.log("cantidadArticulo: " + cantidadArticulo)
+  const articulo = listaArticulos.find((articulos) => articulos.id = idArticulo);
+  console.log(articulo);
+
   //
   //if (carritoCompras.some(articuloCC => articuloCC.id == articulo.id)){
-  if (lista.some(articuloCC => articuloCC.id == articulo.id)){
+  if (listaCarrito.some(articuloCC => articuloCC.id == articulo.id)){
     //
     
   crearMensajeDialog("error", "Ya existe en el carrito");
   } else {
     //.push(articulo);
-    lista.push(articulo);
+    listaCarrito.push(articulo);
     const registro = document.createElement("div");    
     registro.id = "idRegistroEncontradoCarrito";
     registro.className = "registroEncontradoCarrito";    
@@ -498,7 +550,7 @@ function agregarAlCarrito(articulo, cantidad){
             <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
             <h6>CANIDAD: ${articulo.cantidad}</h6>
             <h6>PRECIO: $${articulo.precio}</h6>
-            <h6>TOTAL: $${articulo.precio*articulo.cantidad}</h6>
+            <h6>TOTAL: $${articulo.precio*cantidadArticulo}</h6>
         `;        
     ///////////////////////////
 //////////////////////////////////
@@ -537,65 +589,17 @@ function agregarAlCarrito(articulo, cantidad){
       //ternario
       (document.getElementById("idVerCarritoTotalP")) && (document.getElementById("idVerCarritoTotalP").innerText = "Total del carrito: " + totalCarrito);
     };
-  localStorage.setItem("carritoCompras", JSON.stringify(lista));  
+  localStorage.setItem("carritoCompras", JSON.stringify(listaCarrito));  
   crearMensajeDialog("exito", "Se agrego articulo al carrito");
-  };
-  //
-  //if (carritoCompras.length > 0){
-  if (lista.length > 0){
-    //
-    const tagMain = document.getElementById("idMain");
-    const tagDivContenedorMostrarCarritoBotones = document.createElement("div");
-    tagDivContenedorMostrarCarritoBotones.id = "idContenedorMostrarCarritoBotones";
-    tagDivContenedorMostrarCarritoBotones.className = "contenedorMostrarCarritoBotones";
-    const tagDivContenedorMostrarCarritoElementos = document.createElement("div");
-    tagDivContenedorMostrarCarritoElementos.id = "idContenedorMostrarCarritoElementos";
-    tagDivContenedorMostrarCarritoElementos.className = "contenedorMostrarCarritoElementos";
-    const tagDivMostrarCarritoBotones = document.createElement("div");
-    tagDivMostrarCarritoBotones.id = "idMostrarCarritoBotones";
-    tagDivMostrarCarritoBotones.className = "mostrarCarritoBotones";
-    //
-    const tagButtonVerCarrito = document.createElement("button");
-    tagButtonVerCarrito.id = "idVerCarrito";
-    tagButtonVerCarrito.className = "buttonCarrito";
-    tagButtonVerCarrito.innerText = "Ver Carrito";
-    tagButtonVerCarrito.addEventListener("click",verCarrito);
-    //
-    const tagButtonOcultarCarrito = document.createElement("button");
-    tagButtonOcultarCarrito.id = "idOcultarCarrito";
-    tagButtonOcultarCarrito.className = "buttonCarrito";
-    tagButtonOcultarCarrito.innerText = "Ocultar Carrito";
-    tagButtonOcultarCarrito.addEventListener("click",ocultarCarrito);
-    //
-    const tagButtonVaciarCarrito = document.createElement("button");
-    tagButtonVaciarCarrito.id = "idVaciarCarrito";
-    tagButtonVaciarCarrito.className = "buttonCarrito";
-    tagButtonVaciarCarrito.innerText = "Vaciar Carrito";
-    tagButtonVaciarCarrito.addEventListener("click",vaciarCarrito);
-    //
-    tagDivMostrarCarritoBotones.appendChild(tagButtonVerCarrito);
-    tagDivMostrarCarritoBotones.appendChild(tagButtonOcultarCarrito);
-    tagDivMostrarCarritoBotones.appendChild(tagButtonVaciarCarrito);
-    tagDivContenedorMostrarCarritoBotones.appendChild(tagDivMostrarCarritoBotones);
-    //
-   /* if (document.getElementById("idContenedorMostrarCarritoBotones")){
-       tagMain.replaceChild(tagDivContenedorMostrarCarritoBotones,document.getElementById("idContenedorMostrarCarritoBotones"));
-    } else {
-       tagMain.appendChild(tagDivContenedorMostrarCarritoBotones);
-    };*/
- //ternario
-  (document.getElementById("idContenedorMostrarCarritoBotones")) ?
-  tagMain.replaceChild(tagDivContenedorMostrarCarritoBotones,document.getElementById("idContenedorMostrarCarritoBotones")) :
-  tagMain.appendChild(tagDivContenedorMostrarCarritoBotones);
   };
 };
 
 function crearFormularioComprar(e){
   e.preventDefault();
   const listaPrecios = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   console.log("lista precios")
   console.log(listaPrecios)
-  //const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   const tagMain = document.getElementById("idMain");
   const tagDivArticulosEncontrados = document.createElement("div");
   tagDivArticulosEncontrados.id = "idRegistrosEncontrados";
@@ -606,26 +610,40 @@ function crearFormularioComprar(e){
   //
   let articulosEncontrados = [];
   //
+  /*
   if (categoriaBuscar.length > 0){
      //articulosEncontrados = listaPrecioArticulos.filter(
      articulosEncontrados = listaPrecios.filter(
          articulo => articulo.categoria.toUpperCase() == categoriaBuscar.toUpperCase()
      );
   };
+  */
+ //
+  (categoriaBuscar.length > 0) && (articulosEncontrados = listaPrecios.filter(articulo => articulo.categoria.toUpperCase() == categoriaBuscar.toUpperCase()));
 
   if (articulosEncontrados.length == 0) {
+    /*
     if (marcaBuscar.length > 0){
        //articulosEncontrados = listaPrecioArticulos.filter(
        articulosEncontrados = listaPrecios.filter(
          articulo => articulo.marca.toUpperCase().includes(marcaBuscar.toUpperCase())
        );
     };
+    */
+   // ternario
+   (marcaBuscar.length > 0) && ( articulosEncontrados = listaPrecios.filter(articulo => articulo.marca.toUpperCase().includes(marcaBuscar.toUpperCase())));
   } else  {
+    /*
      if (marcaBuscar.length > 0) {
       articulosEncontrados = articulosEncontrados.filter(
          articulo => articulo.marca.toUpperCase().includes(marcaBuscar.toUpperCase())         
       );
     };
+    */
+   // ternario
+   (marcaBuscar.length > 0) && (articulosEncontrados = articulosEncontrados.filter(
+         articulo => articulo.marca.toUpperCase().includes(marcaBuscar.toUpperCase())         
+      ));
   };
   //
   if (categoriaBuscar.length == 0 && marcaBuscar == 0){
@@ -673,7 +691,10 @@ function crearFormularioComprar(e){
         tagBotonComprar.id = "idBotonComprar";
         tagBotonComprar.className = "buttonGlobal";
         tagBotonComprar.innerText = "Comprar";
-        tagBotonComprar.addEventListener("click", () => agregarAlCarrito(articulo,tagInputCantidad.value));
+        tagBotonComprar.dataset.idArticulo = articulo.id;
+        tagBotonComprar.dataset.cantidadArticulo = tagInputCantidad.value;
+        tagBotonComprar.addEventListener("click",agregarAlCarrito);
+        //tagBotonComprar.addEventListener("click", () => agregarAlCarrito(articulo,tagInputCantidad.value));
         tagRegistroEncontradoBoton.appendChild(tagBotonComprar);        
         //
         registro.appendChild(tagRegistroEncontradoComprar);
@@ -742,7 +763,18 @@ function crearFormularioComprar(e){
   if (document.getElementById("idRegistrosEncontrados")){
       tagMain.replaceChild(tagDivArticulosEncontrados,document.getElementById("idRegistrosEncontrados"));
   } else {
-    tagMain.appendChild(tagDivArticulosEncontrados);
-  };   
+    if (document.getElementById("idContenedorMostrarCarritoBotones")) {
+         tagMain.insertBefore(tagDivArticulosEncontrados,document.getElementById("idContenedorMostrarCarritoBotones"));
+    } else {
+         tagMain.appendChild(tagDivArticulosEncontrados);
+    }
+  }; 
+ //ternario 
+ //(document.getElementById("idRegistrosEncontrados")) ? (tagMain.replaceChild(tagDivArticulosEncontrados,document.getElementById//("idRegistrosEncontrados"))) : (tagMain.appendChild(tagDivArticulosEncontrados));
+
+ 
+  //
+  //if (carritoCompras.length > 0){
+  //console.log("en buscar - listaCarrito.length: " + listaCarrito.length)
 };
 
