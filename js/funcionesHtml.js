@@ -46,7 +46,18 @@ function crearFormularioCrearArticulo(e){
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
     };
-    localStorage.setItem("formularioActivo","crearFormularioCrearArticulo");
+    const navegacion = performance.getEntriesByType("navigation")[0];
+    console.log("navegacion: " + navegacion)
+    console.log("navegacion.type: " + navegacion.type)
+    localStorage.setItem("formularioActivo","FormularioCrearArticulo");
+    const pantallaActual = "FormularioCrearArticulo";
+    const pantallaAnterior = localStorage.getItem("pantallaActual");
+    ///
+    borrarCamposLocalStorage(pantallaAnterior);
+
+    localStorage.setItem("pantallaAnterior",pantallaAnterior);
+    localStorage.setItem("pantallaActual",pantallaActual);
+    //
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -217,6 +228,35 @@ function crearFormularioCrearArticulo(e){
     tagDivContenedorFormularioElementos.appendChild(tagFormulario);
     tagDivContenedorFormulario.appendChild(tagDivContenedorFormularioElementos);
     tagMain.appendChild(tagDivContenedorFormulario);
+    // inteligencia artificial
+    /*window.addEventListener('beforeunload', () => {
+    const prefijo = 'input_idCrearArticulo';    
+    Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(prefijo)) {
+            localStorage.removeItem(key);
+        }
+    });
+});*/
+    console.log("windows0000")
+   window.addEventListener('beforeunload', () => {
+    // Detectamos el tipo de navegación actual
+    console.log("windows0010")
+    const navegacion = performance.getEntriesByType("navigation")[0];
+    console.log("windows0020")
+    // Si NO es una recarga (F5), significa que el usuario de verdad está abandonando la pantalla
+    if (navegacion && navegacion.type !== "reload") {
+    console.log("windows0030")
+        const prefijo = 'input_idCrearArticulo';    
+        Object.keys(localStorage).forEach(key => {
+            
+    console.log("windows0040")
+           if (key.startsWith(prefijo)) {
+              localStorage.removeItem(key);
+          };
+    console.log("windows0050")
+    });
+    };
+});
 };
 
 function crearFormularioListarArticulos(e){
@@ -224,7 +264,15 @@ function crearFormularioListarArticulos(e){
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
     };
-    localStorage.setItem("formularioActivo","crearFormularioListarArticulo");
+    localStorage.setItem("formularioActivo","crearFormularioListarArticulos");
+    const pantallaActual = "FormularioListarArticulos";
+    const pantallaAnterior = localStorage.getItem("pantallaActual");
+    ///
+    borrarCamposLocalStorage(pantallaAnterior);
+
+    localStorage.setItem("pantallaAnterior",pantallaAnterior);
+    localStorage.setItem("pantallaActual",pantallaActual);
+    //
     const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
@@ -313,7 +361,15 @@ function crearFormularioBuscarArticulos(e){
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
     };
-    localStorage.setItem("formularioActivo","crearFormularioBuscarArticulos");
+    localStorage.setItem("FormularioBuscarArticulos","SI");
+    const pantallaActual = "FormularioBuscarArticulos";
+    const pantallaAnterior = localStorage.getItem("pantallaActual");
+    ///
+    borrarCamposLocalStorage(pantallaAnterior);
+
+    localStorage.setItem("pantallaAnterior",pantallaAnterior);
+    localStorage.setItem("pantallaActual",pantallaActual);
+    //
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -447,6 +503,14 @@ function crearFormularioVerificarExistenciaArticulo(e){
         e.preventDefault();
     };
     localStorage.setItem("formularioActivo","crearFormularioVerificarExistenciaArticulo");
+    const pantallaActual = "FormularioVerificarExistenciaArticulo";
+    const pantallaAnterior = localStorage.getItem("pantallaActual");
+    ///
+    borrarCamposLocalStorage(pantallaAnterior);
+
+    localStorage.setItem("pantallaAnterior",pantallaAnterior);
+    localStorage.setItem("pantallaActual",pantallaActual);
+    //
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -523,6 +587,14 @@ function crearFormularioComprarArticulos(e){
         e.preventDefault();
     };
     localStorage.setItem("formularioActivo","crearFormularioComprarArticulos");
+    const pantallaActual = "FormularioComprarArticulos";
+    const pantallaAnterior = localStorage.getItem("pantallaActual");
+    ///
+    borrarCamposLocalStorage(pantallaAnterior);
+
+    localStorage.setItem("pantallaAnterior",pantallaAnterior);
+    localStorage.setItem("pantallaActual",pantallaActual);
+    //
     const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
     console.log(listaCarrito);
     const tagMain = document.querySelector("main");
@@ -539,8 +611,8 @@ function crearFormularioComprarArticulos(e){
     tagDivContenedorFormularioElementos.className = "contenedorFormularioElementos";
     //
     const tagH2ContenedorBuscarArticulos = document.createElement("h2");
-    tagH2ContenedorBuscarArticulos.id = "idContenedorBuscarArticulosTitulo";
-    tagH2ContenedorBuscarArticulos.className = "contenedorBuscarArticulosTitulo";
+    tagH2ContenedorBuscarArticulos.id = "idContenedorComprarArticulosTitulo";
+    tagH2ContenedorBuscarArticulos.className = "contenedorComprarArticulosTitulo";
     tagH2ContenedorBuscarArticulos.innerText = "Comprar";
     tagDivContenedorFormularioElementos.appendChild(tagH2ContenedorBuscarArticulos);
     // crea tag form
@@ -557,14 +629,14 @@ function crearFormularioComprarArticulos(e){
     tagFormularioCategoriaDiv.className = "renglonFormularioArticulo";
     // crea tag label
     const tagFormularioCategoriaLabel = document.createElement("label");
-    tagFormularioCategoriaLabel.setAttribute("for", "idBuscarArticulosCategoria");
+    tagFormularioCategoriaLabel.setAttribute("for", "idComprarArticulosCategoria");
     tagFormularioCategoriaLabel.className = "labelGlobal";
     tagFormularioCategoriaLabel.innerText = "Categoria: ";
     // crea tag select
     const tagFormularioCategoriaSelect = document.createElement("select");
-    tagFormularioCategoriaSelect.id = "idBuscarArticulosCategoria";
+    tagFormularioCategoriaSelect.id = "idComprarArticulosCategoria";
     tagFormularioCategoriaSelect.className = "inputGlobal";
-    tagFormularioCategoriaSelect.name = "buscarArticulosCategoria";
+    tagFormularioCategoriaSelect.name = "comprarArticulosCategoria";
     //
     const tagSelectOptionValue1 = document.createElement("option");
     tagSelectOptionValue1.innerText = "Seleccione una categoria";
@@ -597,14 +669,14 @@ function crearFormularioComprarArticulos(e){
     tagFormularioMarcaDiv.className = "renglonFormularioArticulo";
     // crea tag label
     const tagFormularioMarcaLabel = document.createElement("label");
-    tagFormularioMarcaLabel.setAttribute("for", "idBuscarArticulosMarca");
+    tagFormularioMarcaLabel.setAttribute("for", "idComprarArticulosMarca");
     tagFormularioMarcaLabel.className = "labelGlobal";
     tagFormularioMarcaLabel.innerText = "Marca: ";
     // crea tag input
     const tagFormularioMarcaInput = document.createElement("input");
-    tagFormularioMarcaInput.id = "idBuscarArticulosMarca";
+    tagFormularioMarcaInput.id = "idComprarArticulosMarca";
     tagFormularioMarcaInput.className = "inputGlobal";
-    tagFormularioMarcaInput.name = "BuscarArticulosMarca";
+    tagFormularioMarcaInput.name = "comprarArticulosMarca";
     tagFormularioMarcaInput.type = "text";
     // carga el label en el div
     tagFormularioMarcaDiv.appendChild(tagFormularioMarcaLabel);

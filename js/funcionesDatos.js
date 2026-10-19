@@ -37,6 +37,7 @@ function cargarArticulo(e){
   if (e && typeof e.preventDefault === "function") {
       e.preventDefault();
   };
+  localStorage.setItem("bloqueActivoCargarArticulo","SI");
   //
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   console.log("lectura lista inicial------------------")
@@ -85,23 +86,31 @@ function cargarArticulo(e){
         lista.push(elementoListaPrecios); 
         localStorage.setItem("listaPrecioArticulos", JSON.stringify(lista));
         //crearMensajeDialog("exito", "El articulo se creo satisfactoriamente");
+        localStorage.removeItem()
         crearMensajeDialog({tipo: "exito", texto: "El articulo se creo satisfactoriamente"});
     };
   };
 };
 
 function crearListadoConDescuento(e){
-  e.preventDefault();
+  //e.preventDefault();
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    };
+  console.log("crearListadoCondDescuento(e)")
+  localStorage.setItem("bloqueActivoCrearListadoConDescuento","SI");
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const listado = document.getElementById("idListarArticulosTablaRegistro");
   const listadoTabla = document.getElementById("idListarArticulosTabla");
   const listadoTablaThead = document.getElementById("idListarArticulosTablaTitulos");
-  const valorDescuento = document.getElementById("idListarArticulosDescuento").value;
+  const valorDescuento = parseInt(document.getElementById("idListarArticulosDescuento").value);
   //
+  console.log("entrada-100")
   if (valorDescuento > 0) {
      listado.innerHTML = "";
      listadoTabla.innerHTML = "";
      
+  console.log("entrada-100-10")
      const tagTablaListadoTbody = document.createElement("tbody");
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
@@ -109,7 +118,7 @@ function crearListadoConDescuento(e){
      //const articulosDescuento = lista.map(articulo => {
      const articulosDescuento = lista.map(({id, codigo, nombre, marca, categoria, precio}) => {
      //const articulosDescuento = listaPrecioArticulos.map(articulo => {
-        let precioDescuento = precio - (precio * (valorDescuento/100));
+        let precioDescuento = (valorDescuento==0) ? (precio) : (precio - (precio * (valorDescuento/100)));
         /*return {
             id: articulo.id,
             codigo: articulo.codigo,
@@ -122,6 +131,7 @@ function crearListadoConDescuento(e){
     });
      //articulosDescuento.forEach(articulo => {
      articulosDescuento.forEach(({id,codigo,nombre,marca,categoria, precio}) => {
+  console.log("entrada-100-30")
         const registro = document.createElement("tr");        
         registro.innerHTML = `
             <td>${id}</td>
@@ -136,9 +146,11 @@ function crearListadoConDescuento(e){
      listadoTabla.appendChild(listadoTablaThead);
      listadoTabla.appendChild(tagTablaListadoTbody);
   } else {
+  console.log("entrada-200")
     listado.innerHTML = "";
     listadoTabla.innerHTML = "";
      
+  console.log("entrada-200-10")
     const tagTablaListadoTbody = document.createElement("tbody");
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
@@ -158,6 +170,7 @@ function crearListadoConDescuento(e){
         tagTablaListadoTbody.appendChild(registro);
     });*/
     lista.forEach(({ id, codigo, nombre, marca, categoria, precio }) => {
+  console.log("entrada-200-30")
         const registro = document.createElement("tr");    
     registro.innerHTML = `
         <td>${id}</td>
@@ -167,6 +180,7 @@ function crearListadoConDescuento(e){
         <td>${categoria.toUpperCase()}</td>
         <td>$${precio}</td>
         `;
+        tagTablaListadoTbody.appendChild(registro);
     });
     listadoTabla.appendChild(listadoTablaThead);
     listadoTabla.appendChild(tagTablaListadoTbody);
@@ -213,6 +227,8 @@ function crearListadoArticulosEncontrados(e){
       e.preventDefault();
   };
   //
+  console.log("localStorage.setItem(bloqueActivoCrearListadoArticulosEncontrados,SI);")
+  localStorage.setItem("bloqueActivoCrearListadoArticulosEncontrados","SI");
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const tagMain = document.getElementById("idMain");
   const tagDivContenedorResultadoBuscar = document.getElementById("idContenedorBuscarArticulosResultados");
@@ -375,6 +391,7 @@ function crearListadoExistenciaArticulo(e){
       e.preventDefault();
   };
   //
+  localStorage.setItem("bloqueActivoCrearListadoExistenciaArticulo","SI");
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const tagMain = document.getElementById("idMain");
   const tagDivContenedorResultadoVerificar= document.getElementById("idContenedorResultadosVerificar");
@@ -491,6 +508,7 @@ function verCarrito(e){
   if (e && typeof e.preventDefault === "function") {
       e.preventDefault();
   };
+  localStorage.setItem("bloqueActivoVerCarrito","SI");
   //
   const lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
   const tagMain = document.getElementById("idMain");
@@ -763,6 +781,7 @@ function crearFormularioComprar(e){
   if (e && typeof e.preventDefault === "function") {
       e.preventDefault();
   };
+  localStorage.setItem("bloqueActivoCrearFormularioComprar","SI");
   //
   const listaPrecios = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
@@ -773,8 +792,8 @@ function crearFormularioComprar(e){
   tagDivArticulosEncontrados.id = "idRegistrosEncontrados";
   tagDivArticulosEncontrados.className = "registrosEncontrados";
   //
-  const categoriaBuscar = document.getElementById("idBuscarArticulosCategoria").value;
-  const marcaBuscar = document.getElementById("idBuscarArticulosMarca").value;
+  const categoriaBuscar = document.getElementById("idComprarArticulosCategoria").value;
+  const marcaBuscar = document.getElementById("idComprarArticulosMarca").value;
   //
   let articulosEncontrados = [];
   //

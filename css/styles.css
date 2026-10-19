@@ -79,7 +79,7 @@ h6{
 }
 
 .contenedorFormularioTitulo, .contenedorListadoTitulo, .contenedorBuscarArticulosTitulo,
-.contenedorVerificarArticuloTitulo {
+.contenedorVerificarArticuloTitulo, .contenedorComprarArticulosTitulo {
     color: green;
     padding: 10px;
     align-items: center;

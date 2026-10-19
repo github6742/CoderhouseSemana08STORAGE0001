@@ -216,23 +216,101 @@ formularioVerificarExistenciaArticulo.addEventListener("click", crearFormularioV
 const formularioComprarArticulos = document.getElementById("idComprar");
 formularioComprarArticulos.addEventListener("click", crearFormularioComprarArticulos);
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-const ultimaVistaActiva = localStorage.getItem("vistaActiva");
-if (ultimaVistaActiva === "crearArticulo") {
-    crearFormularioCrearArticulo(); // Se ejecuta de forma automática tras recargar
-    restaurarBorradorCampos(); // <-- Añadido aquí para rellenar los inputs automáticamente
-}
+switch (localStorage.getItem("formularioActivo")) {
+  case "FormularioCrearArticulo":
+       crearFormularioCrearArticulo();  
+       inputFormularioCrearArticulo();  
+       break;
+  case "FormularioListarArticulos":
+       crearFormularioListarArticulos(); 
+       inputFormularioListarArticulos();     
+       if (localStorage.getItem("bloqueActivoCrearListadoConDescuento") == "SI"){
+        crearListadoConDescuento();
+       };
+       break;
+  case "FormularioBuscarArticulos":
+       crearFormularioBuscarArticulos(); 
+       inputFormularioBuscarArticulos();           
+       if (localStorage.getItem("bloqueActivoCrearListadoArticulosEncontrados") == "SI"){
+        crearListadoArticulosEncontrados();
+       };
+       break;
+  case "FormularioVerificarExistenciaArticulo":
+       crearFormularioVerificarExistenciaArticulo(); 
+       inputFormularioVerificarExistenciaArticulo();            
+       if (localStorage.getItem("bloqueActivoCrearListadoExistenciaArticulo") == "SI"){
+        crearListadoExistenciaArticulo();
+       };
+       break;
+  case "FormularioComprarArticulos":
+       crearFormularioComprarArticulos();  
+       inputFormularioComprarArticulos();         
+       if (localStorage.getItem("bloqueActivoCrearFormularioComprar") == "SI") {
+          crearFormularioComprar();
+          if (localStorage.getItem("bloqueActivoVerCarrito")=="SI"){
+            verCarrito();
+          }
+       }
+       break;
+  default:
+    break;
+};
 // Listener para guardar borradores en tiempo real dentro del formulario
 document.addEventListener("input", (e) => {
     if (e.target && e.target.classList.contains("inputGlobal")) {
-        localStorage.setItem(`borrador_${e.target.id}`, e.target.value);
+        localStorage.setItem(`input_${e.target.id}`, e.target.value);
     }
 });
 
+function obtenerCamposLocalStorage(lista){
+   lista.forEach(id => {
+        const input = document.getElementById(id);
+        const valorGuardado = localStorage.getItem(`input_${id}`);
+        if (input && valorGuardado) {
+            input.value = valorGuardado;
+        }
+    });
+};
+
+function borrarCamposLocalStorage(pantalla) {
+
+const navegacion = performance.getEntriesByType("navigation")[0];
+console.log("borrarCamposLocalStorage function")
+    console.log(navegacion)
+    // Si NO es una recarga (F5), significa que el usuario de verdad está abandonando la pantalla
+    if (navegacion && navegacion.type !== "reload") {
+console.log("borrarCamposLocalStorage function " + navegacion.type)
+
+  let prefijo = "";
+  switch(pantalla){
+   case "FormularioCrearArticulo":
+     prefijo = "input_idCrearArticulo";
+     break;
+   case "FormularioListarArticulos":
+     prefijo = "input_idListarArticulo";
+     break;
+   case "FormularioBuscarArticulos":
+     prefijo = "input_idBuscarArticulo";
+     break;
+   case "FormularioVerificarExistenciaArticulo":
+     prefijo = "input_idVerificarExistenciaArticulo";
+     break;
+   case "FormularioComprarArticulos":
+     prefijo = "input_idComprarArticulos";
+     break;
+   default:
+     break
+  };
+   Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(prefijo)) {
+            localStorage.removeItem(key);
+        }
+    });
+    }
+};
+
 // Función para restaurar los borradores en caso de que existan
-function restaurarBorradorCampos() {
+function inputFormularioCrearArticulo() {
     const campos = [
         "idCrearArticuloCodigo", 
         "idCrearArticuloNombre", 
@@ -240,15 +318,79 @@ function restaurarBorradorCampos() {
         "idCrearArticuloCategoria", 
         "idCrearArticuloPrecio"
     ];
-    campos.forEach(id => {
+    obtenerCamposLocalStorage(campos);
+    /*campos.forEach(id => {
         const input = document.getElementById(id);
-        const valorGuardado = localStorage.getItem(`borrador_${id}`);
+        const valorGuardado = localStorage.getItem(`input_${id}`);
         if (input && valorGuardado) {
             input.value = valorGuardado;
         }
-    });
+    });*/
 }
-*/
+
+// Función para restaurar los borradores en caso de que existan
+function inputFormularioListarArticulos() {
+    const campos = [
+        "idListarArticulosDescuento"
+    ];
+    obtenerCamposLocalStorage(campos);
+    /*
+    campos.forEach(id => {
+        const input = document.getElementById(id);
+        const valorGuardado = localStorage.getItem(`input_${id}`);
+        if (input && valorGuardado) {
+            input.value = valorGuardado;
+        }
+    });*/
+}
+
+function inputFormularioBuscarArticulos(){
+    const campos = [
+        "idBuscarArticulosId",
+        "idBuscarArticulosMarca",
+        "idBuscarArticulosCategoria"
+    ];
+    
+    obtenerCamposLocalStorage(campos);
+   /* campos.forEach(id => {
+        const input = document.getElementById(id);
+        const valorGuardado = localStorage.getItem(`input_${id}`);
+        if (input && valorGuardado) {
+            input.value = valorGuardado;
+        }
+    });*/
+}
+
+function inputFormularioVerificarExistenciaArticulo(){
+    const campos = [
+        "idVerificarExistenciaArticuloCodigo"
+    ];
+    obtenerCamposLocalStorage(campos);
+    /*campos.forEach(id => {
+        const input = document.getElementById(id);
+        const valorGuardado = localStorage.getItem(`input_${id}`);
+        if (input && valorGuardado) {
+            input.value = valorGuardado;
+        }
+    });*/
+}
+
+function inputFormularioComprarArticulos(){
+    const campos = [
+        "idComprarArticulosCategoria",
+        "idComprarArticulosMarca"
+    ];
+    obtenerCamposLocalStorage(campos);
+    /*campos.forEach(id => {
+        const input = document.getElementById(id);
+        const valorGuardado = localStorage.getItem(`input_${id}`);
+        if (input && valorGuardado) {
+            input.value = valorGuardado;
+        }
+    });*/
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 // Al presionar el botón de Guardar / Submit exitoso, recuerda limpiar estos borradores con:
 // localStorage.removeItem("borrador_idCrearArticuloCodigo"); (etc.)
 //////////////////////////////////////////////////////////////////////////
