@@ -1,36 +1,3 @@
-function crearMensajeDialog(tipo, texto){
-    //
-    const tagMensajeDialog = document.createElement("dialog");
-    tagMensajeDialog.id = "idMensajeDialog";
-    tagMensajeDialog.className = "mensajeDialog";
-    //
-    const tagMensajeH3Dialog = document.createElement("h3");
-    tagMensajeH3Dialog.id = "idMensajeH3Dialog";
-    tagMensajeH3Dialog.className = "mensajeH3Dialog";
-    //
-    // ternario
-     tipo === "exito" ? tagMensajeH3Dialog.innerText="✔ Correcto" : tagMensajeH3Dialog.innerText="❌ Error";
-    //
-    const tagMensajeParrafoDialog = document.createElement("p");
-    tagMensajeParrafoDialog.id = "idMensajeParrafoDialog";
-    tagMensajeParrafoDialog.className = "mensajeParrafoDialog";
-    tagMensajeParrafoDialog.innerText = texto;
-    //
-    const tagMensajeBotonDialog = document.createElement("button");
-    tagMensajeBotonDialog.id = "idMensajeBotonDialog";
-    tagMensajeBotonDialog.className = "buttonGlobal";
-    tagMensajeBotonDialog.innerText = "Aceptar";
-    tagMensajeBotonDialog.addEventListener("click", function() {
-        tagMensajeDialog.close();
-        tagMensajeDialog.remove();
-    });
-    //
-    tagMensajeDialog.appendChild(tagMensajeH3Dialog);
-    tagMensajeDialog.appendChild(tagMensajeParrafoDialog);
-    tagMensajeDialog.appendChild(tagMensajeBotonDialog);
-    document.body.appendChild(tagMensajeDialog);
-    tagMensajeDialog.showModal();
-};
 
 function crearHeaderMenu(){
   const tagHeader = document.querySelector("header");
@@ -51,14 +18,17 @@ function crearHeaderMenu(){
   tagHeaderUl.id = "idUlMenu";
   tagHeaderUl.className = "headerUlMenu";
 
-  listaMenu.forEach(menu =>{
+  //listaMenu.forEach(menu =>{
+  listaMenu.forEach(({id,titulo}) =>{
      let tagHeaderLiMenu = document.createElement("li");
      tagHeaderLiMenu.id = "idOpcionMenuTextoLi";
      tagHeaderLiMenu.className = "opcionMenuTextoLi";
      let tagHeaderLiAMenu = document.createElement("a");
-     tagHeaderLiAMenu.id = menu.id;
+     //tagHeaderLiAMenu.id = menu.id;
+     tagHeaderLiAMenu.id = id;
      tagHeaderLiAMenu.className = "opcionMenuTextoA";
-     tagHeaderLiAMenu.innerText = menu.titulo;
+     //tagHeaderLiAMenu.innerText = menu.titulo;
+     tagHeaderLiAMenu.innerText = titulo;
      tagHeaderLiMenu.appendChild(tagHeaderLiAMenu);
      tagHeaderUl.appendChild(tagHeaderLiMenu);
      }
@@ -237,6 +207,7 @@ function crearFormularioCrearArticulo(e){
     tagFormularioBoton.className = "buttonGlobal";
     tagFormularioBoton.type = "submit";
     tagFormularioBoton.innerText = "Guardar";
+    //
     // carga el boton en el formulario
     tagFormulario.appendChild(tagFormularioBoton);
     tagDivContenedorFormularioElementos.appendChild(tagFormulario);
@@ -308,15 +279,16 @@ function crearFormularioListarArticulos(e){
     tagTablaListadoTbody.className = "tablaListarArticulosTablaRegistro";
     //
     //listaPrecioArticulos.forEach(articulo => {
-    lista.forEach(articulo => {
+    //lista.forEach(articulo => {
+    lista.forEach(({id,codigo,nombre, marca, categoria,precio}) => {
         const registro = document.createElement("tr");        
         registro.innerHTML = `
-            <td>${articulo.id}</td>
-            <td>${articulo.codigo.toUpperCase()}</td>
-            <td>${articulo.nombre.toUpperCase()}</td>
-            <td>${articulo.marca.toUpperCase()}</td>
-            <td>${articulo.categoria.toUpperCase()}</td>
-            <td>$${articulo.precio}</td>
+            <td>${id}</td>
+            <td>${codigo.toUpperCase()}</td>
+            <td>${nombre.toUpperCase()}</td>
+            <td>${marca.toUpperCase()}</td>
+            <td>${categoria.toUpperCase()}</td>
+            <td>$${precio}</td>
         `;        
         tagTablaListadoTbody.appendChild(registro);
     });
@@ -532,6 +504,7 @@ function crearFormularioVerificarExistenciaArticulo(e){
 function crearFormularioComprarArticulos(e){
     e.preventDefault();
     const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
+    console.log(listaCarrito);
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -631,7 +604,9 @@ function crearFormularioComprarArticulos(e){
     //
     tagMain.appendChild(tagDivContenedorFormulario);
 
-    if (listaCarrito.length > 0){
-        verBotonesCarrito();
-    };
+    //if (listaCarrito.length > 0){
+    //    verBotonesCarrito();
+    //};
+    //ternario
+    (listaCarrito.length > 0) && (verBotonesCarrito());
 };

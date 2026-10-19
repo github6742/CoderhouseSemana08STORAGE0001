@@ -165,13 +165,21 @@ const listaPrecioArticulos = [
       }
 ];
 
-const listaPrecioArticulosStorage = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
-
-(listaPrecioArticulosStorage.length == 0) && (listaPrecioArticulosStorage = [...listaPrecioArticulos]);
-
-localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulosStorage));
-//const carritoCompras = [];
-const carritoCompras = JSON.parse(localStorage.getItem("carritoCompras")) || [];
+//const listaPreciosArticulosStorage = (JSON.parse(localStorage.getItem("listaPrecioArticulos")) == null) && ([]);
+const listaPreciosArticulosStorage = (JSON.parse(localStorage.getItem("listaPrecioArticulos")) == null) ? ([]) : JSON.parse(localStorage.getItem("listaPrecioArticulos"));
+console.log(listaPreciosArticulosStorage);
+if (listaPreciosArticulosStorage.length > 0) {
+   localStorage.setItem("listaPrecioArticulos", JSON.stringify([...listaPreciosArticulosStorage]));
+} else {
+   localStorage.setItem("listaPrecioArticulos", JSON.stringify([...listaPrecioArticulos]));
+};
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+const carritoComprasStorage = (JSON.parse(localStorage.getItem("carritoCompras")) == null) ? ([]) : JSON.parse(localStorage.getItem("carritoCompras"));
+console.log(carritoComprasStorage);
+if (carritoComprasStorage.length > 0) {
+   localStorage.setItem("carritoCompras", JSON.stringify([...carritoComprasStorage]));
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Articulo {
       constructor(id,
                   codigo, 

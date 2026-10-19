@@ -1,21 +1,89 @@
+function crearMensajeDialog({tipo, texto}){
+    //
+    const tagMensajeDialog = document.createElement("dialog");
+    tagMensajeDialog.id = "idMensajeDialog";
+    tagMensajeDialog.className = "mensajeDialog";
+    //
+    const tagMensajeH3Dialog = document.createElement("h3");
+    tagMensajeH3Dialog.id = "idMensajeH3Dialog";
+    tagMensajeH3Dialog.className = "mensajeH3Dialog";
+    //
+    // ternario
+     tipo === "exito" ? tagMensajeH3Dialog.innerText="✔ Correcto" : tagMensajeH3Dialog.innerText="❌ Error";
+    //
+    const tagMensajeParrafoDialog = document.createElement("p");
+    tagMensajeParrafoDialog.id = "idMensajeParrafoDialog";
+    tagMensajeParrafoDialog.className = "mensajeParrafoDialog";
+    tagMensajeParrafoDialog.innerText = texto;
+    //
+    const tagMensajeBotonDialog = document.createElement("button");
+    tagMensajeBotonDialog.id = "idMensajeBotonDialog";
+    tagMensajeBotonDialog.className = "buttonGlobal";
+    tagMensajeBotonDialog.innerText = "Aceptar";
+    tagMensajeBotonDialog.addEventListener("click", function() {
+        tagMensajeDialog.close();
+        tagMensajeDialog.remove();
+    });
+    //
+    tagMensajeDialog.appendChild(tagMensajeH3Dialog);
+    tagMensajeDialog.appendChild(tagMensajeParrafoDialog);
+    tagMensajeDialog.appendChild(tagMensajeBotonDialog);
+    document.body.appendChild(tagMensajeDialog);
+    tagMensajeDialog.showModal();
+};
+
 function cargarArticulo(e){
   e.preventDefault();
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
-  const id = listaPrecioArticulos.length + 1;
-  const codigo = document.getElementById("idCrearArticuloCodigo").value;--idCrearArticuloCodigo
+  console.log("lectura lista inicial------------------")
+  console.log(lista);
+  //
+  const codigo = document.getElementById("idCrearArticuloCodigo").value;
   const nombre = document.getElementById("idCrearArticuloNombre").value;
   const marca = document.getElementById("idCrearArticuloMarca").value;
   const categoria = document.getElementById("idCrearArticuloCategoria").value;
   const precio = document.getElementById("idCrearArticuloPrecio").value;
-  const articuloNuevo = new Articulo(id, 
-                                     codigo.toUpperCase(), 
-                                     nombre.toUpperCase(), 
-                                     marca.toUpperCase(), 
-                                     categoria.toUpperCase(), 
-                                     parseFloat(precio));
-  lista.push(articuloNuevo);
-  localStorage.setItem("listaPrecioArticulos", JSON.stringify(lista));
-  crearMensajeDialog("exito", "El articulo se creo satisfactoriamente");
+  //
+  console.log("codigo: " + codigo)
+  console.log("lista.some------------------")
+  console.log((lista.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase())));
+  if (lista.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase())) {
+    console.log("10")
+    //crearMensajeDialog("error", "Ya existe un articulo con ese codigo: " + codigo + "(id: "+lista.find(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase()).id+")");
+    crearMensajeDialog({tipo:  "error", 
+                        texto: "Ya existe un articulo con ese codigo: " + codigo + 
+                               "(id: " + 
+                               lista.find(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase()).id +
+                               ")"
+                      });
+  } else {
+    if (lista.some(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase())) {
+    console.log("20")
+        //crearMensajeDialog("error", "Ya existe un articulo con ese nombre: " + nombre + lista.find(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase()).id+")");
+        crearMensajeDialog({tipo:  "error", 
+                            texto: "Ya existe un articulo con ese nombre: " + nombre + 
+                               "(id: " + 
+                            lista.find(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase()).id +
+                               ")"
+                          });
+    } else {
+    console.log("30")
+        const id = lista.length + 1;
+        const articuloNuevo = new Articulo(id, 
+                                          codigo.toUpperCase(), 
+                                          nombre.toUpperCase(), 
+                                          marca.toUpperCase(), 
+                                          categoria.toUpperCase(), 
+                                          parseFloat(precio));
+        const elementoListaPrecios = articuloNuevo;
+        console.log(elementoListaPrecios)                                    
+        //lista.push(articuloNuevo);
+        lista.push(elementoListaPrecios); 
+        localStorage.setItem("listaPrecioArticulos", JSON.stringify(lista));
+        //crearMensajeDialog("exito", "El articulo se creo satisfactoriamente");
+        crearMensajeDialog({tipo: "exito", texto: "El articulo se creo satisfactoriamente"});
+    };
+  };
 };
 
 function crearListadoConDescuento(e){
@@ -34,27 +102,30 @@ function crearListadoConDescuento(e){
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
         
-     const articulosDescuento = lista.map(articulo => {
+     //const articulosDescuento = lista.map(articulo => {
+     const articulosDescuento = lista.map(({id, codigo, nombre, marca, categoria, precio}) => {
      //const articulosDescuento = listaPrecioArticulos.map(articulo => {
-        let precioDescuento = articulo.precio - (articulo.precio * (valorDescuento/100));
-        return {
+        let precioDescuento = precio - (precio * (valorDescuento/100));
+        /*return {
             id: articulo.id,
             codigo: articulo.codigo,
             nombre: articulo.nombre,
             marca: articulo.marca,
             categoria: articulo.categoria,
             precio: precioDescuento
-        };
+        };*/
+        return { id, codigo, nombre, marca, categoria, precio: precioDescuento };
     });
-     articulosDescuento.forEach(articulo => {
+     //articulosDescuento.forEach(articulo => {
+     articulosDescuento.forEach(({id,codigo,nombre,marca,categoria, precio}) => {
         const registro = document.createElement("tr");        
         registro.innerHTML = `
-            <td>${articulo.id}</td>
-            <td>${articulo.codigo.toUpperCase()}</td>
-            <td>${articulo.nombre.toUpperCase()}</td>
-            <td>${articulo.marca.toUpperCase()}</td>
-            <td>${articulo.categoria.toUpperCase()}</td>
-            <td>$${articulo.precio*0.10}</td>
+            <td>${id}</td>
+            <td>${codigo.toUpperCase()}</td>
+            <td>${nombre.toUpperCase()}</td>
+            <td>${marca.toUpperCase()}</td>
+            <td>${categoria.toUpperCase()}</td>
+            <td>$${precio}</td>
         `;        
         tagTablaListadoTbody.appendChild(registro);
      });
@@ -69,6 +140,7 @@ function crearListadoConDescuento(e){
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
     //
     //listaPrecioArticulos.forEach(articulo => {
+    /*
     lista.forEach(articulo => {
         const registro = document.createElement("tr");        
         registro.innerHTML = `
@@ -80,6 +152,16 @@ function crearListadoConDescuento(e){
             <td>$${articulo.precio}</td>
         `;        
         tagTablaListadoTbody.appendChild(registro);
+    });*/
+    lista.forEach(({ id, codigo, nombre, marca, categoria, precio }) => {
+    registro.innerHTML = `
+        <td>${id}</td>
+        <td>${codigo.toUpperCase()}</td>
+        <td>${nombre.toUpperCase()}</td>
+        <td>${marca.toUpperCase()}</td>
+        <td>${categoria.toUpperCase()}</td>
+        <td>$${precio}</td>
+        `;
     });
     listadoTabla.appendChild(listadoTablaThead);
     listadoTabla.appendChild(tagTablaListadoTbody);
@@ -88,9 +170,10 @@ function crearListadoConDescuento(e){
 
 function eliminarArticuloLista(e){
   e.preventDefault();
-  const idArticulo = e.target.dataset.id;
-  const idDivregistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  //const idArticulo = e.target.dataset.id;
+  //const idDivregistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
+  const {id: idArticulo, idRegistrosEncontrados: idDivRegistrosEncontrados } = e.target.dataset;
   //const indice = listaPrecioArticulos.findIndex((articulo) => articulo.id == idArticulo);
   const indice = lista.findIndex((articulo) => articulo.id == idArticulo);
   /*
@@ -101,7 +184,7 @@ function eliminarArticuloLista(e){
   */
  //ternario
   indice !== -1 && lista.splice(indice, 1);
-  const contenedor = document.getElementById(idDivregistrosEncontrados);
+  const contenedor = document.getElementById(idDivRegistrosEncontrados);
   for (const registro of contenedor.children) {
      const boton = registro.querySelector(".buttonGlobal");
      if (boton && boton.dataset.id === idArticulo) {
@@ -111,7 +194,8 @@ function eliminarArticuloLista(e){
   };
   
   localStorage.setItem("listaPrecioArticulos", JSON.stringify(lista));
-  crearMensajeDialog("exito", "Se elimino el articulo de la lista de precios");
+  //crearMensajeDialog("exito", "Se elimino el articulo de la lista de precios");
+  crearMensajeDialog({tipo: "exito", texto: "Se elimino el articulo de la lista de precios"});
 };
 
 function crearListadoArticulosEncontrados(e){
@@ -132,7 +216,7 @@ function crearListadoArticulosEncontrados(e){
   //if (listaPrecioArticulos.some(articulo => articulo.id == idBuscar) && (!esString(idBuscar))){
   if (lista.some(articulo => articulo.id == idBuscar) && (!esString(idBuscar))){
      let articuloEncontrado = listaPrecioArticulos.find(articulo => articulo.id == idBuscar);
-     articulosEncontrados = [
+     /*articulosEncontrados = [
         {          
           id: articuloEncontrado.id,
           codigo: articuloEncontrado.codigo,
@@ -142,6 +226,8 @@ function crearListadoArticulosEncontrados(e){
           precio: articuloEncontrado.precio
         }
       ];
+      */
+     articulosEncontrados = [{ ...articuloEncontrado }];
   };
   //
   if (articulosEncontrados.length == 0) {
@@ -183,18 +269,23 @@ function crearListadoArticulosEncontrados(e){
   //
   if (esString(idBuscar) && categoriaBuscar.length == 0 && marcaBuscar == 0){
       //listaPrecioArticulos.forEach(articulo => {
-      lista.forEach(articulo => {
+      //lista.forEach(articulo => {
+
+        
+      //lista.forEach(({ id, codigo, nombre, marca, categoria, precio }) => {
+      lista.forEach(({ id, codigo, nombre, marca, categoria, precio }) => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado";    
         registro.innerHTML = `
-            <h6>ID: ${articulo.id}</h6>
-            <h6>CODIGO: ${articulo.codigo.toUpperCase()}</h6>
-            <h6>NOMBRE: ${articulo.nombre.toUpperCase()}</h6>
-            <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
-            <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
-            <h6>PRECIO: $${articulo.precio}</h6>
-        `;        
+            <h6>ID: ${id}</h6>
+            <h6>CODIGO: ${codigo.toUpperCase()}</h6>
+            <h6>NOMBRE: ${nombre.toUpperCase()}</h6>
+            <h6>MARCA:  ${marca.toUpperCase()}</h6>
+            <h6>CATEGORIA: ${categoria.toUpperCase()}</h6>
+            <h6>PRECIO: $${precio}</h6>
+        `;    
+            
         //tagDivArticulosEncontrados.appendChild(registro);
 
         const tagDivContenedorBotonEliminarArticuloLista = document.createElement("div");
@@ -205,7 +296,7 @@ function crearListadoArticulosEncontrados(e){
         tagDivBotonEliminarArticuloLista.id = "idBotonEliminarArticuloLista";
         tagDivBotonEliminarArticuloLista.className = "buttonGlobal";
         tagDivBotonEliminarArticuloLista.innerText = "Eliminar";
-        tagDivBotonEliminarArticuloLista.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloLista.dataset.id = id;
         tagDivBotonEliminarArticuloLista.dataset.idRegistrosEncontrados = "idRegistrosEncontrados";
         tagDivBotonEliminarArticuloLista.addEventListener("click",eliminarArticuloLista);
 
@@ -218,19 +309,21 @@ function crearListadoArticulosEncontrados(e){
       });
   } else {
      if (articulosEncontrados.length == 0){
-        crearMensajeDialog("error", "No se encontraron articulos con esos filtros");
+        //crearMensajeDialog("error", "No se encontraron articulos con esos filtros");
+        crearMensajeDialog({tipo: "error", texto: "No se encontraron articulos con esos filtros"});
      } else {
-        articulosEncontrados.forEach(articulo => {
+        //articulosEncontrados.forEach(articulo => {
+        articulosEncontrados.forEach(({id,codigo,nombre,marca,categoria,precio}) => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado";    
         registro.innerHTML = `
-            <h6>ID: ${articulo.id}</h6>
-            <h6>CODIGO: ${articulo.codigo.toUpperCase()}</h6>
-            <h6>NOMBRE: ${articulo.nombre.toUpperCase()}</h6>
-            <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
-            <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
-            <h6>PRECIO: $${articulo.precio}</h6>
+            <h6>ID: ${id}</h6>
+            <h6>CODIGO: ${codigo.toUpperCase()}</h6>
+            <h6>NOMBRE: ${nombre.toUpperCase()}</h6>
+            <h6>MARCA:  ${marca.toUpperCase()}</h6>
+            <h6>CATEGORIA: ${categoria.toUpperCase()}</h6>
+            <h6>PRECIO: $${precio}</h6>
         `;        
         //tagDivArticulosEncontrados.appendChild(registro);     
         
@@ -244,7 +337,7 @@ function crearListadoArticulosEncontrados(e){
         tagDivBotonEliminarArticuloLista.id = "idBotonEliminarArticuloLista";
         tagDivBotonEliminarArticuloLista.className = "buttonGlobal";
         tagDivBotonEliminarArticuloLista.innerText = "Eliminar";
-        tagDivBotonEliminarArticuloLista.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloLista.dataset.id = id;
         tagDivBotonEliminarArticuloLista.dataset.idRegistrosEncontrados = "idRegistrosEncontrados";
         tagDivBotonEliminarArticuloLista.addEventListener("click",eliminarArticuloLista);
 
@@ -254,6 +347,10 @@ function crearListadoArticulosEncontrados(e){
        });
      };
   };
+
+
+
+
   //
   tagDivContenedorResultadoBuscar.appendChild(tagDivArticulosEncontrados);
   tagMain.appendChild(tagDivContenedorResultadoBuscar);
@@ -276,7 +373,7 @@ function crearListadoExistenciaArticulo(e){
   if (lista.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )) {
      //let articuloEncontrado = listaPrecioArticulos.find(articulo => articulo.codigo == codigo.toUpperCase());
      let articuloEncontrado = lista.find(articulo => articulo.codigo == codigo.toUpperCase());
-     articulosEncontrados = [
+     /*articulosEncontrados = [
         {          
           id: articuloEncontrado.id,
           codigo: articuloEncontrado.codigo,
@@ -286,22 +383,26 @@ function crearListadoExistenciaArticulo(e){
           precio: articuloEncontrado.precio
         }
       ];
+      */
+     articulosEncontrados = [{...articuloEncontrado}];
    };
    //
    if (codigo.length == 0){
       //
       //listaPrecioArticulos.forEach(articulo => {
-      lista.forEach(articulo => {
+      //lista.forEach(articulo => {
+        
+      lista.forEach(({ id, codigo, nombre, marca, categoria, precio }) => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado";    
         registro.innerHTML = `
-            <h6>ID: ${articulo.id}</h6>
-            <h6>CODIGO: ${articulo.codigo.toUpperCase()}</h6>
-            <h6>NOMBRE: ${articulo.nombre.toUpperCase()}</h6>
-            <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
-            <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
-            <h6>PRECIO: $${articulo.precio}</h6>
+            <h6>ID: ${id}</h6>
+            <h6>CODIGO: ${codigo.toUpperCase()}</h6>
+            <h6>NOMBRE: ${nombre.toUpperCase()}</h6>
+            <h6>MARCA:  ${marca.toUpperCase()}</h6>
+            <h6>CATEGORIA: ${categoria.toUpperCase()}</h6>
+            <h6>PRECIO: $${precio}</h6>
         `;        
         tagDivArticulosEncontrados.appendChild(registro);
       });
@@ -311,19 +412,21 @@ function crearListadoExistenciaArticulo(e){
    } else {
       //
       if (articulosEncontrados.length == 0) {
-         crearMensajeDialog("error", "No se encontraron articulos con esos filtros");
+         //crearMensajeDialog("error", "No se encontraron articulos con esos filtros");
+         crearMensajeDialog({tipo: "error", texto:"No se encontraron articulos con esos filtros"});
       } else {
-         articulosEncontrados.forEach(articulo => {
+         //articulosEncontrados.forEach(articulo => {
+         articulosEncontrados.forEach(({id,codigo,nombre,marca,categoria,precio}) => {
          const registro = document.createElement("div");    
          registro.id = "idRegistroEncontrado";
          registro.className = "registroEncontrado";    
          registro.innerHTML = `
-            <h6>ID: ${articulo.id}</h6>
-            <h6>CODIGO: ${articulo.codigo.toUpperCase()}</h6>
-            <h6>NOMBRE: ${articulo.nombre.toUpperCase()}</h6>
-            <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
-            <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
-            <h6>PRECIO: $${articulo.precio}</h6>
+            <h6>ID: ${id}</h6>
+            <h6>CODIGO: ${codigo.toUpperCase()}</h6>
+            <h6>NOMBRE: ${nombre.toUpperCase()}</h6>
+            <h6>MARCA:  ${marca.toUpperCase()}</h6>
+            <h6>CATEGORIA: ${categoria.toUpperCase()}</h6>
+            <h6>PRECIO: $${precio}</h6>
          `;        
          tagDivArticulosEncontrados.appendChild(registro);
          });
@@ -337,8 +440,9 @@ function crearListadoExistenciaArticulo(e){
 function eliminarArticuloCarrito(e){
   e.preventDefault();
   const lista = JSON.parse(localStorage.getItem("carritoCompras")) || [];
-  const idArticulo = e.target.dataset.id;
-  const idDivRegistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
+  //const idArticulo = e.target.dataset.id;
+  //const idDivRegistrosEncontrados = e.target.dataset.idRegistrosEncontrados;
+  const {id: idArticulo, idRegistrosEncontrados: idDivRegistrosEncontrados} = e.target.dataset;
   //const indice = carritoCompras.findIndex((articulo) => articulo.id == idArticulo);
   const indice = lista.findIndex((articulo) => articulo.id == idArticulo);
   /*if (indice !== -1) {
@@ -357,7 +461,8 @@ function eliminarArticuloCarrito(e){
      };
   };  
   localStorage.setItem("carritoCompras", JSON.stringify(lista));
-  crearMensajeDialog("exito", "Se elimino el articulo del carrito");
+  //crearMensajeDialog("exito", "Se elimino el articulo del carrito");
+  crearMensajeDialog({tipo: "exito", texto: "Se elimino el articulo del carrito"});
 };
 
 function verCarrito(e){
@@ -385,20 +490,22 @@ function verCarrito(e){
   //
   let totalCarrito = 0;
   //carritoCompras.forEach( articulo =>{ 
-  lista.forEach( articulo =>{ 
+  //lista.forEach( articulo =>{ 
+      lista.forEach(({ id, codigo, nombre, marca, categoria, precio, cantidad }) => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontradoCarrito";
         registro.className = "registroEncontradoCarrito";    
         registro.innerHTML = `
-            <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
-            <h6>CODIGO: ${articulo.codigo.toUpperCase()}</h6>
-            <h6>NOMBRE: ${articulo.nombre.toUpperCase()}</h6>
-            <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
-            <h6>CANIDAD: ${articulo.cantidad}</h6>
-            <h6>PRECIO: $${articulo.precio}</h6>
-            <h6>TOTAL: $${articulo.precio*articulo.cantidad}</h6>
+            <h6>ID: ${id}</h6>
+            <h6>CATEGORIA: ${categoria.toUpperCase()}</h6>
+            <h6>CODIGO: ${codigo.toUpperCase()}</h6>
+            <h6>NOMBRE: ${nombre.toUpperCase()}</h6>
+            <h6>MARCA:  ${marca.toUpperCase()}</h6>
+            <h6>CANIDAD: ${cantidad}</h6>
+            <h6>PRECIO: $${precio}</h6>
+            <h6>TOTAL: $${precio*cantidad}</h6>
         `;        
-        totalCarrito += articulo.precio*articulo.cantidad;
+        totalCarrito += precio*cantidad;
         tagContenedorRegistroEncontradoCarrito.appendChild(registro);
 
         //tagDivArticulosEncontrados.appendChild(registro);
@@ -411,7 +518,7 @@ function verCarrito(e){
         tagDivBotonEliminarArticuloCarrito.id = "idBotonEliminarArticuloLista";
         tagDivBotonEliminarArticuloCarrito.className = "buttonGlobal";
         tagDivBotonEliminarArticuloCarrito.innerText = "Eliminar";
-        tagDivBotonEliminarArticuloCarrito.dataset.id = articulo.id;
+        tagDivBotonEliminarArticuloCarrito.dataset.id = id;
         tagDivBotonEliminarArticuloCarrito.dataset.idRegistrosEncontrados = "idContenedorRegistroEncontradoCarrito";
         tagDivBotonEliminarArticuloCarrito.addEventListener("click",eliminarArticuloCarrito);
 
@@ -517,26 +624,35 @@ function vaciarCarrito(e){
   lista.length > 0 && lista.splice(0,lista.length);
   //
   localStorage.setItem("carritoCompras", JSON.stringify(lista));
-  crearMensajeDialog("exito", "El carrito de compras esta vacio ahora");
+  //crearMensajeDialog("exito", "El carrito de compras esta vacio ahora");
+  crearMensajeDialog({tipo: "exito", texto: "El carrito de compras esta vacio ahora"});
 };
 
 function agregarAlCarrito(e){
   e.preventDefault();  
-  listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
-  listaArticulos = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
-  const idArticulo = e.target.dataset.idArticulo;
-  const cantidadArticulo = e.target.dataset.cantidadArticulo;
+  const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
+  const listaArticulos = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+
+  console.log(listaCarrito);
+
+  //const idArticulo = e.target.dataset.idArticulo;
+  const {idArticulo: idArticulo} = e.target.dataset;
+  //const articuloLista = listaArticulos.find(articulo => articulo.id = idArticulo);
+  //const cantidadArticulo = e.target.dataset.cantidad;
+  const cantidadArticulo = document.getElementById("idCantidadPedida-"+idArticulo).value;
   console.log("idArticulo: " + idArticulo)
   console.log("cantidadArticulo: " + cantidadArticulo)
   const articulo = listaArticulos.find((articulos) => articulos.id = idArticulo);
   console.log(articulo);
+  articulo.cantidad = cantidadArticulo;
 
   //
   //if (carritoCompras.some(articuloCC => articuloCC.id == articulo.id)){
   if (listaCarrito.some(articuloCC => articuloCC.id == articulo.id)){
     //
     
-  crearMensajeDialog("error", "Ya existe en el carrito");
+  //crearMensajeDialog("error", "Ya existe en el carrito");
+  crearMensajeDialog({tipo: "error", texto: "Ya existe en el carrito"});
   } else {
     //.push(articulo);
     listaCarrito.push(articulo);
@@ -544,11 +660,12 @@ function agregarAlCarrito(e){
     registro.id = "idRegistroEncontradoCarrito";
     registro.className = "registroEncontradoCarrito";    
     registro.innerHTML = `
+            <h6>ID: ${articulo.id}</h6>
             <h6>CATEGORIA: ${articulo.categoria.toUpperCase()}</h6>
             <h6>CODIGO: ${articulo.codigo.toUpperCase()}</h6>
             <h6>NOMBRE: ${articulo.nombre.toUpperCase()}</h6>
             <h6>MARCA:  ${articulo.marca.toUpperCase()}</h6>
-            <h6>CANIDAD: ${articulo.cantidad}</h6>
+            <h6>CANTIDAD: ${articulo.cantidad}</h6>
             <h6>PRECIO: $${articulo.precio}</h6>
             <h6>TOTAL: $${articulo.precio*cantidadArticulo}</h6>
         `;        
@@ -580,7 +697,7 @@ function agregarAlCarrito(e){
     if (document.getElementById("idContenedorRegistroEncontradoCarrito")) {
        document.getElementById("idContenedorRegistroEncontradoCarrito").appendChild(registro);
        //const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
-       const totalCarrito = lista.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
+       const totalCarrito = listaCarrito.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
        //
        /*if(document.getElementById("idVerCarritoTotalP")){
          document.getElementById("idVerCarritoTotalP").innerText = "Total del carrito: " + totalCarrito;
@@ -590,8 +707,14 @@ function agregarAlCarrito(e){
       (document.getElementById("idVerCarritoTotalP")) && (document.getElementById("idVerCarritoTotalP").innerText = "Total del carrito: " + totalCarrito);
     };
   localStorage.setItem("carritoCompras", JSON.stringify(listaCarrito));  
-  crearMensajeDialog("exito", "Se agrego articulo al carrito");
+  //crearMensajeDialog("exito", "Se agrego articulo al carrito");
+  crearMensajeDialog({tipo: "exito", texto: "Se agrego articulo al carrito"});
   };
+
+
+    (listaCarrito.length > 0) && (verBotonesCarrito());
+
+
 };
 
 function crearFormularioComprar(e){
@@ -648,7 +771,8 @@ function crearFormularioComprar(e){
   //
   if (categoriaBuscar.length == 0 && marcaBuscar == 0){
      //listaPrecioArticulos.forEach(articulo => {
-     listaPrecios.forEach(articulo => {
+     //listaPrecios.forEach(articulo => {
+     listaPrecios.forEach(({id,codigo,nombre,marca,categoria, precio}) => { 
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado"; 
@@ -658,25 +782,25 @@ function crearFormularioComprar(e){
         tagRegistroEncontradoComprar.className = "registroEncontradoComprar";
         //
         const tagH6Nombre = document.createElement("h6");
-        tagH6Nombre.innerText = "NOMBRE: " + articulo.nombre.toUpperCase();
+        tagH6Nombre.innerText = "NOMBRE: " + nombre.toUpperCase();
         tagRegistroEncontradoComprar.appendChild(tagH6Nombre);
         const tagH6Marca = document.createElement("h6");
-        tagH6Marca.innerText = "MARCA: " + articulo.marca.toUpperCase();
+        tagH6Marca.innerText = "MARCA: " + marca.toUpperCase();
         tagRegistroEncontradoComprar.appendChild(tagH6Marca);
         const tagH6Precio = document.createElement("h6");
-        tagH6Precio.innerText = "PRECIO: " + articulo.precio;
+        tagH6Precio.innerText = "PRECIO: " + precio;
         tagRegistroEncontradoComprar.appendChild(tagH6Precio);
         //
         const tagLabelCantidad = document.createElement("label");
-        tagLabelCantidad.setAttribute("for", "idListarArticulosDescuento");
+        tagLabelCantidad.setAttribute("for", "idCantidadPedida-"+ id);
         tagLabelCantidad.className = "labelGlobal";
         tagLabelCantidad.innerText = "Cantidad: ";
         tagRegistroEncontradoComprar.appendChild(tagLabelCantidad);
         //
         const tagInputCantidad = document.createElement("input");
-        tagInputCantidad.id = "idListarArticulosDescuento";
+        tagInputCantidad.id = "idCantidadPedida-"+ id;
         tagInputCantidad.className = "inputGlobal";
-        tagInputCantidad.name = "listarArticulosDescuento";
+        tagInputCantidad.name = "cantidadPedida-"+ id;
         tagInputCantidad.type = "number";
         tagInputCantidad.min = 1;
         tagInputCantidad.max = 99;
@@ -691,7 +815,7 @@ function crearFormularioComprar(e){
         tagBotonComprar.id = "idBotonComprar";
         tagBotonComprar.className = "buttonGlobal";
         tagBotonComprar.innerText = "Comprar";
-        tagBotonComprar.dataset.idArticulo = articulo.id;
+        tagBotonComprar.dataset.idArticulo = id;
         tagBotonComprar.dataset.cantidadArticulo = tagInputCantidad.value;
         tagBotonComprar.addEventListener("click",agregarAlCarrito);
         //tagBotonComprar.addEventListener("click", () => agregarAlCarrito(articulo,tagInputCantidad.value));
@@ -704,9 +828,10 @@ function crearFormularioComprar(e){
     });
   } else {
      if (articulosEncontrados.length == 0){
-        crearMensajeDialog("error", "No se encontraron articulos con esos filtros");
+        //crearMensajeDialog("error", "No se encontraron articulos con esos filtros");
+        crearMensajeDialog({ tipo: "error", texto: "No se encontraron articulos con esos filtros"});
     } else {
-        articulosEncontrados.forEach(articulo => {
+        articulosEncontrados.forEach(({id,codigo,nombre,marca,categoria, precio}) => {
         const registro = document.createElement("div");    
         registro.id = "idRegistroEncontrado";
         registro.className = "registroEncontrado"; 
@@ -716,28 +841,28 @@ function crearFormularioComprar(e){
         tagRegistroEncontradoComprar.className = "registroEncontradoComprar";
         //
         const tagH6Nombre = document.createElement("h6");
-        tagH6Nombre.innerText = "NOMBRE: " + articulo.nombre.toUpperCase();
+        tagH6Nombre.innerText = "NOMBRE: " + nombre.toUpperCase();
         tagRegistroEncontradoComprar.appendChild(tagH6Nombre);
         const tagH6Marca = document.createElement("h6");
-        tagH6Marca.innerText = "MARCA: " + articulo.marca.toUpperCase();
+        tagH6Marca.innerText = "MARCA: " + marca.toUpperCase();
         tagRegistroEncontradoComprar.appendChild(tagH6Marca);
         const tagH6Precio = document.createElement("h6");
-        tagH6Precio.innerText = "PRECIO: " + articulo.precio;
+        tagH6Precio.innerText = "PRECIO: " + precio;
         tagRegistroEncontradoComprar.appendChild(tagH6Precio);
         //
         const tagLabelCantidad = document.createElement("label");
-        tagLabelCantidad.setAttribute("for", "idListarArticulosDescuento");
+        tagLabelCantidad.setAttribute("for", "idCantidadPedida-"+id);
         tagLabelCantidad.className = "labelGlobal";
         tagLabelCantidad.innerText = "Cantidad: ";
         tagRegistroEncontradoComprar.appendChild(tagLabelCantidad);
         //
         const tagInputCantidad = document.createElement("input");
-        tagInputCantidad.id = "idListarArticulosDescuento";
+        tagInputCantidad.id = "idCantidadPedida-"+id;
         tagInputCantidad.className = "inputGlobal";
-        tagInputCantidad.name = "listarArticulosDescuento";
+        tagInputCantidad.name = "cantidadPedida-"+id;
         tagInputCantidad.type = "number";
         tagInputCantidad.min = 1;
-        tagInputCantidad.max = 99;
+        tagInputCantidad.max = 999;
         tagInputCantidad.defaultValue = 1;
         tagRegistroEncontradoComprar.appendChild(tagInputCantidad);
         //
@@ -749,7 +874,10 @@ function crearFormularioComprar(e){
         tagBotonComprar.id = "idBotonComprar";
         tagBotonComprar.className = "buttonGlobal";
         tagBotonComprar.innerText = "Comprar";
-        tagBotonComprar.addEventListener("click", () => agregarAlCarrito(articulo,tagInputCantidad.value));
+        //tagBotonComprar.addEventListener("click", () => agregarAlCarrito(articulo,tagInputCantidad.value));
+        tagBotonComprar.dataset.idArticulo = id;
+        //tagBotonComprar.dataset.cantidad = tagInputCantidad.value;
+        tagBotonComprar.addEventListener("click",agregarAlCarrito);
         tagRegistroEncontradoBoton.appendChild(tagBotonComprar);        
         //
         registro.appendChild(tagRegistroEncontradoComprar);
