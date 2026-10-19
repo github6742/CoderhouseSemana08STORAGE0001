@@ -461,9 +461,4 @@ function restaurarBorradorCampos() {
 }
 // Al presionar el botón de Guardar / Submit exitoso, recuerda limpiar estos borradores con:
 // localStorage.removeItem("borrador_idCrearArticuloCodigo"); (etc.)
-/*
-if (ultimaVistaActiva === "crearArticulo") {
-    crearFormularioCrearArticulo();
-    restaurarBorradorCampos(); // <-- Añadido aquí para rellenar los inputs automáticamente
-}
-*/
+//////////////////////////////////////////////////////////////////////////

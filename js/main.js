@@ -199,7 +199,7 @@ const esNulo = (valor) => (valor == "");
 const esNaN = (valor) => (isNaN(Number(valor)));
 const esString = (valor) => (isNaN(Number(valor)));
 
-crearHeaderMenu();
+crearHeaderMenu(); 
 
 const formularioCrearArticulo = document.getElementById("idCrearArticulo");
 formularioCrearArticulo.addEventListener("click", crearFormularioCrearArticulo);
@@ -215,3 +215,41 @@ formularioVerificarExistenciaArticulo.addEventListener("click", crearFormularioV
 
 const formularioComprarArticulos = document.getElementById("idComprar");
 formularioComprarArticulos.addEventListener("click", crearFormularioComprarArticulos);
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+const ultimaVistaActiva = localStorage.getItem("vistaActiva");
+if (ultimaVistaActiva === "crearArticulo") {
+    crearFormularioCrearArticulo(); // Se ejecuta de forma automática tras recargar
+    restaurarBorradorCampos(); // <-- Añadido aquí para rellenar los inputs automáticamente
+}
+// Listener para guardar borradores en tiempo real dentro del formulario
+document.addEventListener("input", (e) => {
+    if (e.target && e.target.classList.contains("inputGlobal")) {
+        localStorage.setItem(`borrador_${e.target.id}`, e.target.value);
+    }
+});
+
+// Función para restaurar los borradores en caso de que existan
+function restaurarBorradorCampos() {
+    const campos = [
+        "idCrearArticuloCodigo", 
+        "idCrearArticuloNombre", 
+        "idCrearArticuloMarca", 
+        "idCrearArticuloCategoria", 
+        "idCrearArticuloPrecio"
+    ];
+    campos.forEach(id => {
+        const input = document.getElementById(id);
+        const valorGuardado = localStorage.getItem(`borrador_${id}`);
+        if (input && valorGuardado) {
+            input.value = valorGuardado;
+        }
+    });
+}
+*/
+// Al presionar el botón de Guardar / Submit exitoso, recuerda limpiar estos borradores con:
+// localStorage.removeItem("borrador_idCrearArticuloCodigo"); (etc.)
+//////////////////////////////////////////////////////////////////////////
+

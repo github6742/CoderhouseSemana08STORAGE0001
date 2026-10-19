@@ -78,8 +78,8 @@ h6{
     border-radius: 8px;
 }
 
-.contenedorFormularioTitulo, .contenedorListadoTitulo, .contenedorBuscarArticulosTitulo
-/*,.contenedorVerificarArticuloTitulo*/ {
+.contenedorFormularioTitulo, .contenedorListadoTitulo, .contenedorBuscarArticulosTitulo,
+.contenedorVerificarArticuloTitulo {
     color: green;
     padding: 10px;
     align-items: center;

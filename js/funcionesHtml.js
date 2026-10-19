@@ -42,7 +42,11 @@ function crearHeaderMenu(){
 };
 
 function crearFormularioCrearArticulo(e){
-    e.preventDefault();
+    //e.preventDefault();
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    };
+    localStorage.setItem("formularioActivo","crearFormularioCrearArticulo");
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -216,7 +220,11 @@ function crearFormularioCrearArticulo(e){
 };
 
 function crearFormularioListarArticulos(e){
-    e.preventDefault();
+    //e.preventDefault();
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    };
+    localStorage.setItem("formularioActivo","crearFormularioListarArticulo");
     const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
@@ -301,7 +309,11 @@ function crearFormularioListarArticulos(e){
 };
 
 function crearFormularioBuscarArticulos(e){
-    e.preventDefault();
+    //e.preventDefault();
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    };
+    localStorage.setItem("formularioActivo","crearFormularioBuscarArticulos");
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -430,7 +442,11 @@ function crearFormularioBuscarArticulos(e){
 };
 
 function crearFormularioVerificarExistenciaArticulo(e){
-    e.preventDefault();
+    //e.preventDefault();
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    };
+    localStorage.setItem("formularioActivo","crearFormularioVerificarExistenciaArticulo");
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";
@@ -502,7 +518,11 @@ function crearFormularioVerificarExistenciaArticulo(e){
 };
 
 function crearFormularioComprarArticulos(e){
-    e.preventDefault();
+    //e.preventDefault();
+    if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+    };
+    localStorage.setItem("formularioActivo","crearFormularioComprarArticulos");
     const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
     console.log(listaCarrito);
     const tagMain = document.querySelector("main");
