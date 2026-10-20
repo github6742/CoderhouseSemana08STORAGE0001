@@ -167,7 +167,7 @@ const listaPrecioArticulos = [
 
 //const listaPreciosArticulosStorage = (JSON.parse(localStorage.getItem("listaPrecioArticulos")) == null) && ([]);
 const listaPreciosArticulosStorage = (JSON.parse(localStorage.getItem("listaPrecioArticulos")) == null) ? ([]) : JSON.parse(localStorage.getItem("listaPrecioArticulos"));
-console.log(listaPreciosArticulosStorage);
+//console.log(listaPreciosArticulosStorage);
 if (listaPreciosArticulosStorage.length > 0) {
    localStorage.setItem("listaPrecioArticulos", JSON.stringify([...listaPreciosArticulosStorage]));
 } else {
@@ -175,7 +175,7 @@ if (listaPreciosArticulosStorage.length > 0) {
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 const carritoComprasStorage = (JSON.parse(localStorage.getItem("carritoCompras")) == null) ? ([]) : JSON.parse(localStorage.getItem("carritoCompras"));
-console.log(carritoComprasStorage);
+//console.log(carritoComprasStorage);
 if (carritoComprasStorage.length > 0) {
    localStorage.setItem("carritoCompras", JSON.stringify([...carritoComprasStorage]));
 }
@@ -215,35 +215,49 @@ formularioVerificarExistenciaArticulo.addEventListener("click", crearFormularioV
 
 const formularioComprarArticulos = document.getElementById("idComprar");
 formularioComprarArticulos.addEventListener("click", crearFormularioComprarArticulos);
+window.addEventListener.name
+
+const navegacion = performance.getEntriesByType("navigation")[0];
+console.log("MAIN GLOBAL-navegacion.TYPE: " + navegacion.type)
 
 switch (localStorage.getItem("formularioActivo")) {
   case "FormularioCrearArticulo":
+       console.log("MAIN-crearFormularioCrearArticulo")
        crearFormularioCrearArticulo();  
+       console.log("MAIN-inputFormularioCrearArticulo")
        inputFormularioCrearArticulo();  
        break;
   case "FormularioListarArticulos":
+       console.log("MAIN-crearFormularioListarArticulos");
        crearFormularioListarArticulos(); 
+       console.log("MAIN-inputFormularioListarArticulos");
        inputFormularioListarArticulos();     
        if (localStorage.getItem("bloqueActivoCrearListadoConDescuento") == "SI"){
         crearListadoConDescuento();
        };
        break;
   case "FormularioBuscarArticulos":
+       console.log("MAIN-crearFormularioBuscarArticulos");
        crearFormularioBuscarArticulos(); 
+       console.log("MAIN-inputFormularioBuscarArticulos");
        inputFormularioBuscarArticulos();           
        if (localStorage.getItem("bloqueActivoCrearListadoArticulosEncontrados") == "SI"){
         crearListadoArticulosEncontrados();
        };
        break;
   case "FormularioVerificarExistenciaArticulo":
+       console.log("MAIN-crearFormularioVerificarExistenciaArticulo");
        crearFormularioVerificarExistenciaArticulo(); 
+       console.log("MAIN-inputFormularioVerificarExistenciaArticulo");
        inputFormularioVerificarExistenciaArticulo();            
        if (localStorage.getItem("bloqueActivoCrearListadoExistenciaArticulo") == "SI"){
         crearListadoExistenciaArticulo();
        };
        break;
   case "FormularioComprarArticulos":
+       console.log("MAIN-crearFormularioComprarArticulos");
        crearFormularioComprarArticulos();  
+       console.log("MAIN-inputFormularioComprarArticulos");
        inputFormularioComprarArticulos();         
        if (localStorage.getItem("bloqueActivoCrearFormularioComprar") == "SI") {
           crearFormularioComprar();
@@ -275,11 +289,11 @@ function obtenerCamposLocalStorage(lista){
 function borrarCamposLocalStorage(pantalla) {
 
 const navegacion = performance.getEntriesByType("navigation")[0];
-console.log("borrarCamposLocalStorage function")
-    console.log(navegacion)
+console.log("borrarCamposLocalStorage-navegacion.type: "+navegacion.type)
+//console.log(navegacion)
     // Si NO es una recarga (F5), significa que el usuario de verdad está abandonando la pantalla
-    if (navegacion && navegacion.type !== "reload") {
-console.log("borrarCamposLocalStorage function " + navegacion.type)
+    //if (navegacion && navegacion.type !== "reload") {
+//console.log("borrarCamposLocalStorage function " + navegacion.type)
 
   let prefijo = "";
   switch(pantalla){
@@ -301,12 +315,20 @@ console.log("borrarCamposLocalStorage function " + navegacion.type)
    default:
      break
   };
+//}
    Object.keys(localStorage).forEach(key => {
         if (key.startsWith(prefijo)) {
             localStorage.removeItem(key);
         }
     });
-    }
+    prefijo = "bloqueActivo";
+   Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(prefijo)) {
+            ///localStorage.removeItem(key);
+            localStorage.setItem(key,"NO");
+        }
+    });
+    
 };
 
 // Función para restaurar los borradores en caso de que existan

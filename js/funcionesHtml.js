@@ -42,19 +42,24 @@ function crearHeaderMenu(){
 };
 
 function crearFormularioCrearArticulo(e){
+
     //e.preventDefault();
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
+        borrarCamposLocalStorage(localStorage.getItem("pantallaActual"));
     };
-    const navegacion = performance.getEntriesByType("navigation")[0];
-    console.log("navegacion: " + navegacion)
-    console.log("navegacion.type: " + navegacion.type)
+    
+//const navegacion = performance.getEntriesByType("navigation")[0];
+//console.log("crearFormularioCrearArticulo-navegacion.TYPE: " + navegacion.type)
+    //const navegacion = performance.getEntriesByType("navigation")[0];
+    //console.log("navegacion: " + navegacion)
+    //console.log("navegacion.type: " + navegacion.type)
     localStorage.setItem("formularioActivo","FormularioCrearArticulo");
     const pantallaActual = "FormularioCrearArticulo";
     const pantallaAnterior = localStorage.getItem("pantallaActual");
     ///
-    borrarCamposLocalStorage(pantallaAnterior);
-
+    ///borrarCamposLocalStorage(pantallaAnterior);
+    ///
     localStorage.setItem("pantallaAnterior",pantallaAnterior);
     localStorage.setItem("pantallaActual",pantallaActual);
     //
@@ -237,7 +242,7 @@ function crearFormularioCrearArticulo(e){
         }
     });
 });*/
-    console.log("windows0000")
+//    console.log("windows0000")
    window.addEventListener('beforeunload', () => {
     // Detectamos el tipo de navegación actual
     console.log("windows0010")
@@ -263,12 +268,14 @@ function crearFormularioListarArticulos(e){
     //e.preventDefault();
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
+        borrarCamposLocalStorage(localStorage.getItem("pantallaActual"));
     };
-    localStorage.setItem("formularioActivo","crearFormularioListarArticulos");
+console.log("crearFormularioListarArticulos-navegacion.TYPE: " + navegacion.type)
+    localStorage.setItem("formularioActivo","FormularioListarArticulos");
     const pantallaActual = "FormularioListarArticulos";
     const pantallaAnterior = localStorage.getItem("pantallaActual");
     ///
-    borrarCamposLocalStorage(pantallaAnterior);
+    //borrarCamposLocalStorage(pantallaAnterior);
 
     localStorage.setItem("pantallaAnterior",pantallaAnterior);
     localStorage.setItem("pantallaActual",pantallaActual);
@@ -360,12 +367,14 @@ function crearFormularioBuscarArticulos(e){
     //e.preventDefault();
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
+        borrarCamposLocalStorage(localStorage.getItem("pantallaActual"));
     };
-    localStorage.setItem("FormularioBuscarArticulos","SI");
+console.log("crearFormularioBuscarArticulos-navegacion.TYPE: " + navegacion.type)
+    localStorage.setItem("formularioActivo","FormularioBuscarArticulos");
     const pantallaActual = "FormularioBuscarArticulos";
     const pantallaAnterior = localStorage.getItem("pantallaActual");
     ///
-    borrarCamposLocalStorage(pantallaAnterior);
+    //borrarCamposLocalStorage(pantallaAnterior);
 
     localStorage.setItem("pantallaAnterior",pantallaAnterior);
     localStorage.setItem("pantallaActual",pantallaActual);
@@ -501,12 +510,14 @@ function crearFormularioVerificarExistenciaArticulo(e){
     //e.preventDefault();
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
+        borrarCamposLocalStorage(localStorage.getItem("pantallaActual"));
     };
-    localStorage.setItem("formularioActivo","crearFormularioVerificarExistenciaArticulo");
+console.log("crearFormularioVerificarExistenciaArticulo-navegacion.TYPE: " + navegacion.type)
+    localStorage.setItem("formularioActivo","FormularioVerificarExistenciaArticulo");
     const pantallaActual = "FormularioVerificarExistenciaArticulo";
     const pantallaAnterior = localStorage.getItem("pantallaActual");
     ///
-    borrarCamposLocalStorage(pantallaAnterior);
+    //borrarCamposLocalStorage(pantallaAnterior);
 
     localStorage.setItem("pantallaAnterior",pantallaAnterior);
     localStorage.setItem("pantallaActual",pantallaActual);
@@ -585,18 +596,20 @@ function crearFormularioComprarArticulos(e){
     //e.preventDefault();
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
+        borrarCamposLocalStorage(localStorage.getItem("pantallaActual"));
     };
-    localStorage.setItem("formularioActivo","crearFormularioComprarArticulos");
+console.log("crearFormularioComprarArticulos-navegacion.TYPE: " + navegacion.type)
+    localStorage.setItem("formularioActivo","FormularioComprarArticulos");
     const pantallaActual = "FormularioComprarArticulos";
     const pantallaAnterior = localStorage.getItem("pantallaActual");
     ///
-    borrarCamposLocalStorage(pantallaAnterior);
+    //borrarCamposLocalStorage(pantallaAnterior);
 
     localStorage.setItem("pantallaAnterior",pantallaAnterior);
     localStorage.setItem("pantallaActual",pantallaActual);
     //
     const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
-    console.log(listaCarrito);
+    //console.log(listaCarrito);
     const tagMain = document.querySelector("main");
     tagMain.id = "idMain";
     tagMain.className = "claseMain";

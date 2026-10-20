@@ -97,7 +97,7 @@ function crearListadoConDescuento(e){
     if (e && typeof e.preventDefault === "function") {
         e.preventDefault();
     };
-  console.log("crearListadoCondDescuento(e)")
+  //console.log("crearListadoCondDescuento(e)")
   localStorage.setItem("bloqueActivoCrearListadoConDescuento","SI");
   const lista = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const listado = document.getElementById("idListarArticulosTablaRegistro");
@@ -105,12 +105,12 @@ function crearListadoConDescuento(e){
   const listadoTablaThead = document.getElementById("idListarArticulosTablaTitulos");
   const valorDescuento = parseInt(document.getElementById("idListarArticulosDescuento").value);
   //
-  console.log("entrada-100")
+  //console.log("entrada-100")
   if (valorDescuento > 0) {
      listado.innerHTML = "";
      listadoTabla.innerHTML = "";
      
-  console.log("entrada-100-10")
+  //console.log("entrada-100-10")
      const tagTablaListadoTbody = document.createElement("tbody");
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
@@ -131,7 +131,7 @@ function crearListadoConDescuento(e){
     });
      //articulosDescuento.forEach(articulo => {
      articulosDescuento.forEach(({id,codigo,nombre,marca,categoria, precio}) => {
-  console.log("entrada-100-30")
+  //console.log("entrada-100-30")
         const registro = document.createElement("tr");        
         registro.innerHTML = `
             <td>${id}</td>
@@ -146,11 +146,11 @@ function crearListadoConDescuento(e){
      listadoTabla.appendChild(listadoTablaThead);
      listadoTabla.appendChild(tagTablaListadoTbody);
   } else {
-  console.log("entrada-200")
+  //console.log("entrada-200")
     listado.innerHTML = "";
     listadoTabla.innerHTML = "";
      
-  console.log("entrada-200-10")
+  ///console.log("entrada-200-10")
     const tagTablaListadoTbody = document.createElement("tbody");
      tagTablaListadoTbody.id = "idListarArticulosTablaRegistro";     
      tagTablaListadoTbody.className = "listarArticulosTablaRegistro";
@@ -170,7 +170,7 @@ function crearListadoConDescuento(e){
         tagTablaListadoTbody.appendChild(registro);
     });*/
     lista.forEach(({ id, codigo, nombre, marca, categoria, precio }) => {
-  console.log("entrada-200-30")
+  //console.log("entrada-200-30")
         const registro = document.createElement("tr");    
     registro.innerHTML = `
         <td>${id}</td>
@@ -785,8 +785,8 @@ function crearFormularioComprar(e){
   //
   const listaPrecios = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   const listaCarrito = JSON.parse(localStorage.getItem("carritoCompras")) || [];
-  console.log("lista precios")
-  console.log(listaPrecios)
+  //console.log("lista precios")
+  //console.log(listaPrecios)
   const tagMain = document.getElementById("idMain");
   const tagDivArticulosEncontrados = document.createElement("div");
   tagDivArticulosEncontrados.id = "idRegistrosEncontrados";
